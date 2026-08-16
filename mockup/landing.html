@@ -1,0 +1,97 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=1440">
+<title>转型罗盘 — 着陆页</title><style>
+:root{
+  --ink:#1d1d1f; --mid:#707070; --nav:#474747; --hair:#d6d6d6;
+  --canvas:#f5f5f7; --paper:#ffffff; --wash:#e8e8ed; --faded:#fafafc;
+  --blue:#0071e3; --link:#0066cc; --ember:#b64400;
+  --r-card:28px; --r-btn:980px; --r-link:10px; --r-badge:36px;
+  --maxw:1200px;
+  --sf-d:'SF Pro Display',ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --sf-t:'SF Pro Text',ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{font-family:var(--sf-t);color:var(--ink);background:var(--paper);line-height:1.47}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 40px}
+.band{padding:120px 0}
+.band.white{background:var(--paper)}
+.band.gray{background:var(--canvas)}
+.eyebrow{font-family:var(--sf-t);font-weight:400;font-size:17px;color:var(--mid);letter-spacing:-0.022em}
+.brand-mark{font-family:var(--sf-d);font-weight:600;font-size:28px;color:var(--ink);letter-spacing:.08em;text-align:center}
+.h-display{font-family:var(--sf-d);font-weight:600;font-size:80px;line-height:1.05;letter-spacing:-1.44px;color:var(--ink)}
+.h-hero{font-family:var(--sf-d);font-weight:700;font-size:96px;line-height:1.04;letter-spacing:-1.44px;color:var(--ink)}
+.h-sec{font-family:var(--sf-d);font-weight:600;font-size:40px;line-height:1.14;letter-spacing:0.007em;color:var(--ink)}
+.h-card{font-family:var(--sf-d);font-weight:600;font-size:28px;line-height:1.2;color:var(--ink)}
+.sub{font-family:var(--sf-t);font-weight:400;font-size:21px;line-height:1.4;color:var(--mid);letter-spacing:0.231px;max-width:640px}
+.body{font-size:17px;line-height:1.47;color:var(--mid);letter-spacing:-0.022em}
+.btn{display:inline-block;background:var(--blue);color:#fff;font-family:var(--sf-t);font-weight:400;font-size:17px;
+  padding:11px 22px;border-radius:var(--r-btn);border:none;cursor:pointer;text-decoration:none;letter-spacing:-0.022em}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid rgba(0,0,0,.8)}
+.linkarrow{color:var(--link);font-size:17px;text-decoration:none;letter-spacing:-0.022em}
+.linkarrow:hover{text-decoration:underline}
+.card{background:var(--paper);border-radius:var(--r-card);padding:40px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.badge{display:inline-block;color:var(--ember);font-weight:500;font-size:14px;letter-spacing:0}
+.nav{position:sticky;top:0;height:44px;background:var(--faded);backdrop-filter:blur(20px);display:flex;align-items:center;
+  justify-content:space-between;padding:0 40px;font-size:12px;color:var(--nav);z-index:10}
+.nav .links{display:flex;gap:24px}
+.nav .links a{color:var(--nav);text-decoration:none}
+.tag{display:inline-block;font-size:12px;color:var(--mid);background:var(--canvas);border-radius:var(--r-badge);padding:6px 14px;margin:4px 6px 4px 0}
+.field{margin-bottom:28px}
+.field label{display:block;font-size:17px;font-weight:500;color:var(--ink);margin-bottom:10px;letter-spacing:-0.022em}
+.field input,.field textarea,.field select{width:100%;font-family:var(--sf-t);font-size:17px;color:var(--ink);
+  background:var(--canvas);border:none;border-radius:var(--r-link);padding:14px 16px;outline:none;letter-spacing:-0.022em}
+.field textarea{min-height:110px;resize:vertical}
+.stepno{font-family:var(--sf-d);font-weight:600;font-size:14px;color:var(--blue);letter-spacing:0.1em}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font-size:14px;color:var(--ink);background:var(--canvas);border-radius:var(--r-badge);padding:8px 16px}
+.pill.on{background:var(--ink);color:#fff}
+.meter{height:8px;background:var(--wash);border-radius:var(--r-badge);overflow:hidden;margin-top:10px}
+.meter > i{display:block;height:100%;background:var(--blue);border-radius:var(--r-badge)}
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.tl .when{font-family:var(--sf-d);font-weight:600;font-size:21px;color:var(--ink)}
+.tl .dur{font-size:14px;color:var(--blue);margin:6px 0 12px}
+.foot{background:var(--canvas);padding:48px 0;font-size:12px;color:var(--mid);line-height:1.33}
+.foot a{color:var(--link);text-decoration:none}
+.radar-wrap{display:flex;justify-content:center;align-items:center;padding:20px 0}
+.resume-split{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.resume-split .col h4{font-size:14px;color:var(--mid);font-weight:500;margin-bottom:14px;letter-spacing:0.05em}
+.resume-line{font-size:15px;line-height:1.6;color:var(--ink);padding:10px 0;border-bottom:1px solid var(--canvas)}
+.resume-line .hl{color:var(--blue)}
+</style></head>
+<body class=""><div class="nav"><div class="nav-brand">转型罗盘</div><div class="links"><a>功能</a><a>诊断</a><a>简历</a><a>路径</a><a>登录</a></div></div>
+<section class="band white" style="padding-top:140px;text-align:center">
+  <div class="wrap">
+    <div class="brand-mark">转型罗盘 TransiCompass</div>
+    <h1 class="h-hero" style="margin:24px 0 22px">看清你的<br>下一步。</h1>
+    <p class="sub" style="margin:0 auto 32px;text-align:center">用 AI 把十一年工程经验，翻译成市场真正认的能力与机会。<br>从背景到路径，四步走完你的转型地图。</p>
+    <a class="btn" href="#">开始我的转型诊断</a>
+    <p class="body" style="margin-top:18px;color:var(--mid)">约 8 分钟 · 无需注册即可体验</p>
+  </div>
+</section>
+
+<section class="band gray">
+  <div class="wrap">
+    <h2 class="h-sec" style="margin-bottom:48px">四步，画完你的转型地图。</h2>
+    <div class="grid4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+      <div class="card"><div class="stepno">01</div><div class="h-card" style="margin:14px 0 10px">背景采集</div><p class="body">粘贴简历或回答几个问题，AI 读懂你的真实积累。</p></div><div class="card"><div class="stepno">02</div><div class="h-card" style="margin:14px 0 10px">能力诊断</div><p class="body">六维能力雷达 + 个性化转型方向推荐。</p></div><div class="card"><div class="stepno">03</div><div class="h-card" style="margin:14px 0 10px">简历优化</div><p class="body">把工程经验改写为市场语言，突出可迁移能力。</p></div><div class="card"><div class="stepno">04</div><div class="h-card" style="margin:14px 0 10px">路径规划</div><p class="body">短期 / 中期 / 长期，给出可执行的转型路线。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band white">
+  <div class="wrap" style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center">
+    <div>
+      <h2 class="h-sec">不是模板，<br>是懂你行业的诊断。</h2>
+      <p class="sub" style="margin:20px 0 24px">多数转型工具把简历当通用文本。转型罗盘理解工程语境——招投标、全周期管理、供应链、甲方对接——再映射到低空经济、储能出海、AI 产品这些真实机会。</p>
+      <a class="linkarrow" href="#">看一个诊断样例 ›</a>
+    </div>
+    <div class="card" style="background:var(--canvas)">
+      <div class="body" style="color:var(--ink)">“施工管理 11 年 → 工程咨询 / 低空经济基建”</div>
+      <div class="meter" style="margin-top:18px"><i style="width:84%"></i></div>
+      <div class="body" style="margin-top:14px;color:var(--mid)">转型适配度 84 · 高于同类背景均值</div>
+    </div>
+  </div>
+</section>
+<div class="foot"><div class="wrap">转型罗盘 TransiCompass · 面向工程人的 AI 转型助手 · <a>隐私</a> · <a>条款</a></div></div></body></html>
