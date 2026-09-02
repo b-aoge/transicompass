@@ -1,0 +1,345 @@
+/* ==========================================================================
+   转型罗盘 TranSiCompass — Design Tokens v1.0.0
+   寄存器：Product（工具型）| 刻度：VARIANCE 4 / MOTION 3 / DENSITY 6
+   主题：V1 强制浅色（微信 X5 深色模式会强制反色，破坏中性色阶与刻度条）
+   规则：禁止硬编码颜色。组件内一律 var(--token)，唯一例外 #fff / #000
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* ---------------------------------------------------------------
+     A1-identity · Surface
+     蓝晒图纸张的冷灰白。非奶油色、非纯白。
+     --------------------------------------------------------------- */
+  --bg:              #F6F7F9;
+  --surface:         #FFFFFF;
+  --surface-sunken:  #EDEFF3;   /* B-slot：原文引用、对照前项、免责声明 */
+  --surface-raised:  #FFFFFF;   /* B-slot：弹层、sticky 条 */
+
+  /* ---------------------------------------------------------------
+     A1-identity · Foreground（四级层级，全部达 WCAG AA）
+     对比度基于 --bg #F6F7F9 实测
+     --------------------------------------------------------------- */
+  --fg:         #10151C;   /* 17.09:1  主文本，近黑带蓝调 */
+  --fg-2:       #333C49;   /* 10.40:1  次级文本、正文长段 */
+  --muted:      #5A6572;   /*  5.54:1  副文本、字段说明 */
+  --meta:       #67707E;   /*  4.67:1  三级元数据、时间戳 */
+  --fg-on-accent: #FFFFFF; /*  8.49:1  on --accent */
+
+  /* ---------------------------------------------------------------
+     A1-identity · Border
+     --------------------------------------------------------------- */
+  --border:        #DDE1E8;
+  --border-soft:   #EAEDF1;   /* divide-y 行分隔、刻度线 */
+  --border-strong: #C3CAD4;   /* 输入框、需明确边界的交互元素 */
+
+  /* ---------------------------------------------------------------
+     A1-identity · Accent — Blueprint Blue
+     每屏可见使用 ≤ 2 处。不是 Tailwind 默认 indigo。
+     --------------------------------------------------------------- */
+  --accent:        #14507D;             /* 7.92:1 on --bg */
+  --accent-hover:  #10426A;
+  --accent-active: #0C3555;
+  --accent-on:     #FFFFFF;
+  --accent-wash:   #EAF0F6;             /* C-ext：选中态、最匹配卡、交付物卡底 */
+  --accent-border: #B9CCDD;             /* C-ext：wash 底容器的边框，避免大面积饱和 */
+  --accent-ring:   rgba(20, 80, 125, .28);
+
+  /* ---------------------------------------------------------------
+     A2 · Semantic
+     --------------------------------------------------------------- */
+  --success:        #0E7A54;   /* 4.98:1  工程验收绿 */
+  --success-wash:   #E7F4EE;
+  --success-border: #B7DECB;
+
+  --warn:           #9A5A0B;   /* 5.10:1  赭石琥珀：差距项、置信度提示 */
+  --warn-wash:      #FBF1E3;
+  --warn-border:    #EBD3AE;
+
+  --danger:         #B42318;   /* 6.13:1  错误、删除数据 */
+  --danger-wash:    #FDECEA;
+  --danger-border:  #F3C4BF;
+  --danger-ring:    rgba(180, 35, 24, .28);
+
+  /* ---------------------------------------------------------------
+     C-extension · Data Visualization
+     同色系深浅递进，暗示排序。禁止彩虹色板。
+     匹配度必须「数字 + 条长 + 文字档位」三重编码，绝不单靠颜色。
+     --------------------------------------------------------------- */
+  --data-1:     #14507D;   /* 排名 1（= accent） */
+  --data-2:     #2E7DA6;   /* 4.56:1 on white */
+  --data-3:     #5F89A3;   /* 3.75:1 on white，达图形对比 3:1 */
+  --data-track: #DDE1E8;
+
+  /* ---------------------------------------------------------------
+     A1-identity · Typography
+     中文走系统栈（零加载）；西文标题 Archivo 自托管 latin 子集；
+     数字读数 JetBrains Mono 仅子集化数字。禁止 @import Google Fonts。
+     --------------------------------------------------------------- */
+  --font-display: "Archivo", "PingFang SC", "HarmonyOS Sans SC",
+                  "Source Han Sans SC", "Noto Sans SC", "Microsoft YaHei",
+                  system-ui, sans-serif;
+  --font-body:    -apple-system, BlinkMacSystemFont, "PingFang SC",
+                  "HarmonyOS Sans SC", "Source Han Sans SC", "Noto Sans SC",
+                  "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono",
+                  Consolas, "Liberation Mono", monospace;
+
+  /* A1-structure · Type Scale（clamp 下限保守，防中文长标题 320px 溢出） */
+  --text-xs:   12px;
+  --text-sm:   14px;
+  --text-base: 16px;   /* 正文基准，不得更小 */
+  --text-lg:   18px;
+  --text-xl:   20px;
+  --text-2xl:  clamp(22px, 4.2vw, 24px);
+  --text-3xl:  clamp(26px, 5.6vw, 32px);
+  --text-4xl:  clamp(30px, 7vw,   40px);
+
+  /* 三级字重。不用 ≤300（X5 内核中文发虚），不用 ≥700（过重，不符克制基调） */
+  --weight-read:      400;
+  --weight-emphasize: 500;
+  --weight-announce:  600;
+
+  --leading-tight:   1.25;
+  --leading-snug:    1.4;
+  --leading-body:    1.65;   /* 中文正文高于西文常用 1.5 */
+  --leading-relaxed: 1.75;   /* 隐私政策等长文档 */
+
+  --tracking-display: -.02em;
+  --tracking-heading: -.01em;
+  --tracking-body:      0;
+  --tracking-small:    .01em;
+  --tracking-caps:     .08em;   /* section 标签，强制值 */
+  --tracking-mono:     .01em;
+
+  /* ---------------------------------------------------------------
+     A2 · Spacing（4px 网格。禁止 5/7/13/15/22/30 等非标值）
+     --------------------------------------------------------------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ---------------------------------------------------------------
+     A2 · Radius（上限 14px。禁止 ≥24px 过度圆角）
+     --------------------------------------------------------------- */
+  --radius-xs:   4px;      /* 刻度条、进度条、小标签 */
+  --radius-sm:   6px;      /* 按钮、输入框、chip */
+  --radius-md:   10px;     /* 卡片 */
+  --radius-lg:   14px;     /* 弹层、ActionSheet */
+  --radius-pill: 9999px;   /* 仅计数/状态 chip */
+
+  /* ---------------------------------------------------------------
+     Elevation
+     禁止幽灵卡片：1px 边框 与 blur ≥16px 投影不得共存于同一元素。
+     卡片默认只用 ring，不叠投影。
+     --------------------------------------------------------------- */
+  --elev-flat:        none;
+  --elev-ring:        0 0 0 1px var(--border);
+  --elev-ring-strong: 0 0 0 1px var(--border-strong);
+  --elev-ring-accent: 0 0 0 1.5px var(--accent);
+  --elev-raised:      0 1px 2px rgba(16,21,28,.05), 0 2px 6px rgba(16,21,28,.06);
+  --elev-overlay:     0 8px 24px rgba(16,21,28,.14);   /* 元素本身无边框 */
+  --elev-sticky:      0 -1px 0 var(--border), 0 -6px 14px rgba(16,21,28,.05);
+
+  /* ---------------------------------------------------------------
+     Focus（:focus-visible 必须可见，严禁裸 outline:none）
+     --------------------------------------------------------------- */
+  --focus-ring:        0 0 0 3px var(--accent-ring);
+  --focus-ring-danger: 0 0 0 3px var(--danger-ring);
+  --focus-offset:      2px;
+
+  /* ---------------------------------------------------------------
+     Motion（MOTION_INTENSITY = 3：功能性动效，无装饰）
+     --------------------------------------------------------------- */
+  --motion-instant: 80ms;
+  --motion-fast:    150ms;
+  --motion-base:    200ms;
+  --motion-slow:    300ms;
+  --ease-standard: cubic-bezier(.2, 0, 0, 1);
+  --ease-out:      cubic-bezier(0, 0, .2, 1);
+  --ease-in-out:   cubic-bezier(.4, 0, .2, 1);
+
+  /* ---------------------------------------------------------------
+     Layout
+     --------------------------------------------------------------- */
+  --container-reading: 720px;    /* 结果页：中文每行 25-37 字 */
+  --container-app:     1120px;   /* 输入页桌面分屏壳 */
+  --gutter:            16px;     /* 随断点递增，见下 */
+  --section-y:         32px;     /* 随断点递增，见下 */
+  --header-h:          56px;
+  --cta-bar-h:         68px;
+  --tap-min:           44px;     /* WCAG 2.5.5 硬约束 */
+  --safe-b:            env(safe-area-inset-bottom, 0px);
+
+  /* ---------------------------------------------------------------
+     z-index
+     --------------------------------------------------------------- */
+  --z-base:          0;
+  --z-raised:        10;
+  --z-sticky-header: 100;
+  --z-sticky-cta:    200;
+  --z-dropdown:      300;
+  --z-backdrop:      400;
+  --z-modal:         410;
+  --z-toast:         500;
+
+  /* ---------------------------------------------------------------
+     Icon（Lucide，ISC。严禁 emoji 充当功能图标）
+     --------------------------------------------------------------- */
+  /* 线宽按尺寸反向补偿：渲染线宽 = strokeWidth × (size / 24)
+     2 / 1.75 / 1.5 → 实渲染 1.33 / 1.46 / 1.50px，跨尺寸视觉重量近似恒定。
+     与架构师 Spec 第 8.1 章 Icon.tsx 的 STROKE 映射保持一致。 */
+  --icon-sm: 16px;   --icon-stroke-sm: 2;
+  --icon-md: 20px;   --icon-stroke-md: 1.75;
+  --icon-lg: 24px;   --icon-stroke-lg: 1.5;
+}
+
+/* ==========================================================================
+   断点：移动优先，一律 min-width。主战场为微信内置浏览器。
+   ========================================================================== */
+@media (min-width: 768px) {
+  :root { --gutter: 24px; --section-y: 48px; }
+}
+@media (min-width: 1024px) {
+  :root { --gutter: 32px; --section-y: 80px; }
+}
+
+/* ==========================================================================
+   基础重置（与 tokens 强耦合的部分）
+   ========================================================================== */
+html {
+  -webkit-text-size-adjust: 100%;   /* 微信内置浏览器字号漂移 */
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: anywhere;   /* 中文长词 + 窄网格防溢出 */
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-announce);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-heading);
+  margin: 0;
+}
+h1 { font-size: var(--text-3xl); line-height: var(--leading-tight); letter-spacing: var(--tracking-display); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl);  }
+h4 { font-size: var(--text-lg);  }
+
+/* 所有数字读数：等宽对齐。匹配度、年限、时间轴、倒计时必须带此类 */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-mono);
+}
+
+/* section 小标签：全大写/短标签必须带字距，否则显廉价 */
+.label-caps {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-emphasize);
+  letter-spacing: var(--tracking-caps);
+  color: var(--meta);
+}
+
+/* 焦点可见性 —— 全局兜底，任何组件不得移除 */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+/* 触摸目标兜底 */
+button, a[role="button"], input[type="checkbox"], input[type="radio"] {
+  min-height: var(--tap-min);
+  min-width: var(--tap-min);
+}
+
+/* Lucide 图标默认 */
+.icon {
+  width: var(--icon-md);
+  height: var(--icon-md);
+  stroke-width: var(--icon-stroke-md);
+  stroke: currentColor;
+  fill: none;
+  flex-shrink: 0;
+}
+.icon--sm { width: var(--icon-sm); height: var(--icon-sm); stroke-width: var(--icon-stroke-sm); }
+.icon--lg { width: var(--icon-lg); height: var(--icon-lg); stroke-width: var(--icon-stroke-lg); }
+
+/* ==========================================================================
+   视口高度 —— 兼容性关键（配合 ADR-002 的 Chrome 88 级内核下限）
+   `dvh` 需 Chrome 108+ / Safari 15.4+。目标人群存量安卓机的微信 XWeb 内核
+   有相当比例低于此版本，此时 `100dvh` 无法解析 → 整条声明被丢弃 → 高度塌缩。
+   必须用「先 vh 后 dvh」的层叠回退：老内核吃第一条，新内核用第二条覆盖。
+   注意：严禁在任何组件里裸写 height/min-height: 100dvh。一律用这两个类。
+   ========================================================================== */
+.h-screen-safe {
+  min-height: 100vh;    /* fallback：老内核 */
+  min-height: 100dvh;   /* 新内核覆盖，规避地址栏顶掉 */
+}
+.h-screen-fixed {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ==========================================================================
+   prefers-reduced-motion —— 强制降级，无例外
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* 诊断进度的旋转 spinner 改为静态图标 + 文字状态 */
+  .spinner { animation: none !important; }
+}
+
+/* ==========================================================================
+   深色主题 —— V1 不启用，预留 V1.1
+   启用前置条件：确认微信 X5 内核不再强制反色，或已做 X5 专项适配
+   ========================================================================== */
+:root[data-theme="dark"] {
+  --bg:             #0E1217;
+  --surface:        #161B22;
+  --surface-sunken: #1C222B;
+  --fg:             #EDF1F6;
+  --fg-2:           #C7CFDA;
+  --muted:          #98A2B0;
+  --meta:           #7C8797;
+  --border:         #2A313B;
+  --border-soft:    rgba(255,255,255,.06);
+  --border-strong:  #3A424E;
+  --accent:         #4B93C9;
+  --accent-hover:   #5FA3D6;
+  --accent-active:  #3E82B5;
+  --accent-on:      #08111A;
+  --accent-wash:    #14283A;
+  --accent-border:  #2C4C68;
+  --success:        #3FA97D;
+  --warn:           #D0952F;
+  --danger:         #E5675C;
+  --data-1: #4B93C9; --data-2: #6FAAD6; --data-3: #93C0E0;
+  --data-track: #2A313B;
+  --elev-raised: 0 1px 2px rgba(0,0,0,.3), 0 2px 6px rgba(0,0,0,.24);
+}

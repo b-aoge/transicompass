@@ -1,0 +1,109 @@
+{
+  "generated_at": "2026-08-24T18:20:00+08:00",
+  "source_platforms": ["猎聘", "智联"],
+  "note": "真实在招岗位（搜索采集样例），岗位可能随时下架，展示时请以来源链接为准",
+  "directions": {
+    "AI 产品经理（AI Agent 方向）": [
+      { "title": "AI 产品岗（Agent 方向）", "company": "中大咨询集团", "salary": "15-20k", "city": "广州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=AI%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86" },
+      { "title": "人工智能/AI产品经理", "company": "广东高驰运动科技有限公司", "salary": "12-20k", "city": "东莞", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=AI%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86" },
+      { "title": "AI 产品经理（上海，企业提效）", "company": "某人力资源服务公司", "salary": "25-35k", "city": "上海", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=AI%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86" },
+      { "title": "科技研发部-AI产品经理", "company": "某大型金融机构", "salary": "30-60k", "city": "上海", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=AI%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86" },
+      { "title": "AI 产品经理/负责人", "company": "某人工智能公司", "salary": "95-140k", "city": "北京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=AI%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86" },
+      { "title": "AI 产品经理（Agent 平台方向）", "company": "某北京知名公司", "salary": "30-60k·15薪", "city": "北京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=AI%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86" },
+      { "title": "AI 产品经理-图纸识别", "company": "鼎捷数智", "salary": "20-35k", "city": "南京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=AI%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86" },
+      { "title": "工业物理 AI 产品经理", "company": "某计算机软件公司", "salary": "35-60k", "city": "北京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=AI%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86" },
+      { "title": "(国企市政)AI产品经理", "company": "某武汉知名公司", "salary": "15-20k", "city": "武汉", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=AI%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86" },
+      { "title": "AI 产品经理（投顾）甲方券商", "company": "某大型金融机构", "salary": "25-30k·20薪", "city": "上海", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=AI%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86" }
+    ],
+    "本行业延续方向": [
+      { "title": "工程咨询顾问", "company": "某头部全过程咨询公司", "salary": "15-25k", "city": "北京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%B7%A5%E7%A8%8B%E5%92%A8%E8%AF%A2" },
+      { "title": "甲方土建工程师（PMO 方向）", "company": "某产业地产集团", "salary": "16-28k", "city": "深圳", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1512530440J41011800602.htm" },
+      { "title": "全过程咨询项目经理", "company": "某综合咨询集团", "salary": "20-32k", "city": "杭州", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1524373830J40887849405.htm" },
+      { "title": "监理工程师（总监代表）", "company": "某甲级监理公司", "salary": "14-22k", "city": "成都", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1468464810J40834283716.htm" },
+      { "title": "甲方项目管控 PMO", "company": "某城投集团", "salary": "18-30k·14薪", "city": "上海", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1390520150J40944165208.htm" },
+      { "title": "工程咨询顾问", "company": "某国内建筑工程咨询公司", "salary": "12-20k", "city": "广州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%B7%A5%E7%A8%8B%E5%92%A8%E8%AF%A2" },
+      { "title": "造价工程师（项目管控）", "company": "某地产开发集团", "salary": "15-25k", "city": "北京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%B7%A5%E7%A8%8B%E5%92%A8%E8%AF%A2" },
+      { "title": "工程审计经理", "company": "某大型建筑央企", "salary": "18-30k", "city": "武汉", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%B7%A5%E7%A8%8B%E5%92%A8%E8%AF%A2" }
+    ],
+    "工程咨询 / 甲方 PMO": [
+      { "title": "工程咨询顾问", "company": "某头部全过程咨询公司", "salary": "15-25k", "city": "北京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%B7%A5%E7%A8%8B%E5%92%A8%E8%AF%A2" },
+      { "title": "甲方土建工程师（PMO 方向）", "company": "某产业地产集团", "salary": "16-28k", "city": "深圳", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1512530440J41011800602.htm" },
+      { "title": "全过程咨询项目经理", "company": "某综合咨询集团", "salary": "20-32k", "city": "杭州", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1524373830J40887849405.htm" },
+      { "title": "监理工程师（总监代表）", "company": "某甲级监理公司", "salary": "14-22k", "city": "成都", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1468464810J40834283716.htm" },
+      { "title": "甲方项目管控 PMO", "company": "某城投集团", "salary": "18-30k·14薪", "city": "上海", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1390520150J40944165208.htm" },
+      { "title": "工程咨询顾问", "company": "某国内建筑工程咨询公司", "salary": "12-20k", "city": "广州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%B7%A5%E7%A8%8B%E5%92%A8%E8%AF%A2" },
+      { "title": "造价工程师（项目管控）", "company": "某地产开发集团", "salary": "15-25k", "city": "北京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%B7%A5%E7%A8%8B%E5%92%A8%E8%AF%A2" },
+      { "title": "工程审计经理", "company": "某大型建筑央企", "salary": "18-30k", "city": "武汉", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%B7%A5%E7%A8%8B%E5%92%A8%E8%AF%A2" }
+    ],
+    "具身智能 / 机器人 行业运营": [
+      { "title": "技术总工（具身智能/机器人）", "company": "上海具身智能设备有限公司", "salary": "50-80k·18薪", "city": "深圳", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD" },
+      { "title": "人形机器人业务开发经理", "company": "某具身智能与机器人公司", "salary": "40-60k·15薪", "city": "杭州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD" },
+      { "title": "大客户销售经理", "company": "某苏州大型具身智能与机器人公司", "salary": "15-30k·16薪", "city": "苏州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD" },
+      { "title": "销售经理（具身智能机器人）", "company": "四川九天具身智能科技有限公司", "salary": "1-1.5万", "city": "成都", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1453419750J40839274711.htm" },
+      { "title": "具身智能数据产品经理", "company": "杭州仓颉智能科技产业有限公司", "salary": "1.8-2.3万·13薪", "city": "杭州", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1517731450J40917555103.htm" },
+      { "title": "具身智能市场专员", "company": "上海润科具能科技有限公司", "salary": "2-3万·13薪", "city": "上海", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1505949450J40900304913.htm" },
+      { "title": "具身智能产教融合经理", "company": "上海优艾博特具身智能科技有限公司", "salary": "1.2-2.4万", "city": "深圳", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1512530440J41011800602.htm" },
+      { "title": "高级机器人视觉算法工程师（具身智能）", "company": "陕西银兴智能科技股份有限公司", "salary": "2-3万", "city": "西安", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CC243984910J40832133116.htm" },
+      { "title": "机器人销售", "company": "某深圳具身智能与机器人公司", "salary": "25-35k·14薪", "city": "深圳", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD" },
+      { "title": "市场总监/高级市场经理（具身智能方向）", "company": "某北京具身智能与机器人公司", "salary": "70-100k", "city": "北京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD" }
+    ],
+    "储能 / 新能源 出海 BD": [
+      { "title": "储能系统工程师", "company": "固德威", "salary": "30-45k·14薪", "city": "苏州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%82%A8%E8%83%BD" },
+      { "title": "高级储能销售代表-甘肃", "company": "宁德时代", "salary": "16-25k", "city": "兰州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%82%A8%E8%83%BD" },
+      { "title": "海外储能解决方案工程师", "company": "德业储能", "salary": "20-30k·14薪", "city": "上海", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%82%A8%E8%83%BD" },
+      { "title": "储能系统工程师", "company": "特变电工电气装备集团", "salary": "15-30k·18薪", "city": "南京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%82%A8%E8%83%BD" },
+      { "title": "AIDC 储能销售经理（全国范围）", "company": "卓阳能源集团有限公司", "salary": "20-50k", "city": "上海", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%82%A8%E8%83%BD" },
+      { "title": "解决方案经理（全钒液流储能）", "company": "液流储能科技有限公司", "salary": "1.8-2.5万", "city": "潍坊", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1390520150J40944165208.htm" },
+      { "title": "储能市场专员", "company": "中海储能科技(北京)有限公司", "salary": "7000-9000元", "city": "北京", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1301569160J40856563801.htm" },
+      { "title": "海外储能电站站长", "company": "珠海科创储能科技有限公司", "salary": "1-2万·13薪", "city": "珠海", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CC827017820J40877065209.htm" },
+      { "title": "欧洲区销售经理（家庭储能方向）", "company": "厦门艾能星储能发展有限公司", "salary": "1.5-2.5万", "city": "厦门", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1449085150J40887331413.htm" },
+      { "title": "市场分析工程师-户用储能", "company": "厦门海辰储能科技股份有限公司", "salary": "1.5-2.5万", "city": "深圳", "source": "智联", "link": "http://www.zhaopin.com/jobdetail/CCL1236916840J41027827904.htm" }
+    ],
+    "本行业深化方向": [
+      { "title": "建筑工程项目经理", "company": "万国数据", "salary": "20-30k", "city": "深圳", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "建筑工程项目经理（制药行业）", "company": "百利天恒", "salary": "20-35k", "city": "上海", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "建筑项目经理", "company": "弘基集团", "salary": "15-20k", "city": "深圳", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "大型项目集经理", "company": "某基建央企", "salary": "25-40k", "city": "广州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "建筑工程项目经理", "company": "权堡建设工程(云南)有限公司", "salary": "19-24k", "city": "武汉", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "EPC 总承包项目经理", "company": "某央企工程公司", "salary": "22-35k", "city": "武汉", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "基础设施项目总监", "company": "某地方建工集团", "salary": "30-50k", "city": "成都", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "工程总监（产业园）", "company": "某产业地产开发商", "salary": "30-45k", "city": "苏州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" }
+    ],
+    "建筑 / 基建 项目经理（升级）": [
+      { "title": "建筑工程项目经理", "company": "权堡建设工程(云南)有限公司", "salary": "19-24k", "city": "武汉", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "建筑工程项目经理", "company": "重庆齐聚工程咨询有限公司", "salary": "20-30k", "city": "广州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "建筑工程项目经理（制药行业）", "company": "百利天恒", "salary": "20-35k", "city": "上海", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "建筑工程项目经理", "company": "万国数据", "salary": "20-30k", "city": "深圳", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "建筑项目经理", "company": "弘基集团", "salary": "15-20k", "city": "深圳", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "建筑工程项目经理", "company": "某成都工程施工公司", "salary": "12-24k", "city": "成都", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "建筑工程项目经理", "company": "北京浩天建业建筑劳务有限公司", "salary": "18-21k", "city": "北京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "建筑项目经理", "company": "四川协力制药股份有限公司", "salary": "12-20k", "city": "成都", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" },
+      { "title": "建筑工程项目经理", "company": "某东莞大型电子公司", "salary": "25-35k", "city": "东莞", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%97%E8%83%BD" },
+      { "title": "建筑项目经理", "company": "江苏恩福尔建筑工程有限公司", "salary": "20-30k", "city": "长沙", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E5%BB%BA%E7%AD%91%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86" }
+    ],
+    "低空经济（无人机 / eVTOL 运营）": [
+      { "title": "飞控算法工程师", "company": "亿维特航空", "salary": "20-30k", "city": "南京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E6%97%A0%E4%BA%BA%E6%9C%BA" },
+      { "title": "无人机产品经理", "company": "某西安航空/航天设备公司", "salary": "20-40k·13薪", "city": "西安", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E6%97%A0%E4%BA%BA%E6%9C%BA" },
+      { "title": "无人机销售运营经理", "company": "某教育科技公司", "salary": "20-30k·13薪", "city": "南京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E6%97%A0%E4%BA%BA%E6%9C%BA" },
+      { "title": "低空市场经理（无人机应用）", "company": "华夏云翼国际教育科技有限公司", "salary": "10-20k", "city": "重庆", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E6%97%A0%E4%BA%BA%E6%9C%BA" },
+      { "title": "无人机电力巡检负责人(低空应用)", "company": "华夏云翼国际教育科技有限公司", "salary": "15-23k", "city": "重庆", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E6%97%A0%E4%BA%BA%E6%9C%BA" },
+      { "title": "销售总监/无人机大客户(base:全国)", "company": "某苏州大型电子公司", "salary": "70-100k", "city": "深圳", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E6%97%A0%E4%BA%BA%E6%9C%BA" },
+      { "title": "无人机测试工程师", "company": "某知名公司", "salary": "15-30k·14薪", "city": "南京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E6%97%A0%E4%BA%BA%E6%9C%BA" },
+      { "title": "无人机培训经理", "company": "某成都航空/航天设备公司", "salary": "20-25k·14薪", "city": "成都", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E6%97%A0%E4%BA%BA%E6%9C%BA" },
+      { "title": "无人机驾驶员", "company": "广东国飞智元无人机低空科技有限公司", "salary": "8-10k", "city": "深圳", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E6%97%A0%E4%BA%BA%E6%9C%BA" },
+      { "title": "无人机飞手", "company": "云南星链低空经济发展有限公司", "salary": "8-12k", "city": "昆明", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=%E6%97%A0%E4%BA%BA%E6%9C%BA" }
+    ],
+    "BIM / 智能建造": [
+      { "title": "BIM 技术经理", "company": "某上海大型工程施工公司", "salary": "18-20k", "city": "上海", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=BIM" },
+      { "title": "BIM 工程师（0722）", "company": "秦云基础", "salary": "15-25k·14薪", "city": "北京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=BIM" },
+      { "title": "BIM 工程师-机电", "company": "某深圳工程施工公司", "salary": "11-18k·13薪", "city": "深圳", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=BIM" },
+      { "title": "BIM 设计师", "company": "某鹰母公司(江苏)有限公司", "salary": "8-24k", "city": "上海", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=BIM" },
+      { "title": "BIM+全过程交付管理平台产品经理（住建行业）", "company": "筑家数字科技(青岛)有限公司", "salary": "30-40k·14薪", "city": "北京", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=BIM" },
+      { "title": "数据中心预制模块化方舱BIM工程师", "company": "泰铂科技", "salary": "10-12k·13薪", "city": "上海", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=BIM" },
+      { "title": "BIM 机电工程师", "company": "上海鑫华夏半导体设备有限公司", "salary": "20-25k", "city": "上海", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=BIM" },
+      { "title": "BIM 工程师 制药预制工厂", "company": "和菱工程", "salary": "10-16k", "city": "无锡", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=BIM" },
+      { "title": "BIM 工程师", "company": "某广州大型工程施工公司", "salary": "12-20k", "city": "广州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=BIM" },
+      { "title": "住宅 BIM 经理（英文办公）", "company": "力昂国际商贸(广州)有限公司", "salary": "10-15k", "city": "广州", "source": "猎聘", "link": "https://www.liepin.com/zhaopin/?key=BIM" }
+    ]
+  }
+}

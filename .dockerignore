@@ -1,0 +1,7 @@
+.git
+.workbuddy
+*.md
+install.log
+docs
+npm-debug.log*
+.env*.local

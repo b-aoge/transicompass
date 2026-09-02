@@ -1,0 +1,2343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>转型罗盘 · 产品样品</title>
+<style>
+  :root{
+    /* Apple 风设计 token：表面近白、文字近黑、强调方向蓝、点缀罗盘金 */
+    --bg:#f5f5f7; --bg2:#ffffff; --card:#ffffff;
+    --line:#e8e8ed; --text:#1d1d1f; --sub:#6e6e73;
+    --cyan:#0a6cff; --violet:#0a6cff; --green:#1d8a4f; --amber:#e8a33d;
+    --red:#d92d20;
+    --shadow:0 4px 28px rgba(0,0,0,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Inter","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    background:radial-gradient(1000px 600px at 85% -10%,rgba(10,108,255,.05),transparent 60%),
+               radial-gradient(900px 520px at 0% 6%,rgba(232,163,61,.045),transparent 55%),
+               #f5f5f7;
+    color:var(--text);min-height:100vh;padding:52px 40px 90px;
+  }
+  .wrap{width:96vw;max-width:1680px;margin:0 auto}
+
+  /* 顶部品牌区 */
+  .brand{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+  .brand-left{display:flex;align-items:center;gap:12px}
+  .logo{width:48px;height:48px;border-radius:13px;background:linear-gradient(135deg,#0a6cff,#e8a33d);
+    display:grid;place-items:center;font-weight:800;color:#fff;font-size:26px;box-shadow:0 6px 18px rgba(10,108,255,.28)}
+  .brand h1{font-size:30px;letter-spacing:.5px}
+  .key-btn{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--sub);border:1px solid var(--line);
+    background:var(--card);padding:9px 18px;border-radius:22px;cursor:pointer;transition:.2s}
+  .key-btn:hover{border-color:var(--violet);color:var(--text)}
+  .key-btn .dot{width:6px;height:6px;border-radius:50%;background:var(--red)}
+  .key-btn .dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
+  .trial-remain{font-size:13px;color:var(--sub);margin:14px 0 4px;padding:10px 12px;background:var(--bg);border:1px solid var(--line);border-radius:10px;line-height:1.7}
+  .trial-remain b{color:var(--text)}
+  .trial-remain .bar{height:6px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:8px;overflow:hidden}
+  .trial-remain .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));border-radius:3px;transition:width .3s}
+  .trial-remain.warn .bar i{background:var(--amber)}
+  .trial-remain.danger .bar i{background:var(--red)}
+
+  .sub{color:var(--sub);font-size:17px;margin-bottom:12px}
+  .trust{display:flex;align-items:center;gap:12px;color:var(--sub);font-size:14px;margin-bottom:22px;flex-wrap:wrap}
+  .trust span{display:flex;align-items:center;gap:4px}
+  /* 定位说明卡：明确「专为建筑行业转型人群」 */
+  .positioning{background:linear-gradient(135deg,rgba(10,108,255,.10),rgba(10,108,255,.10));
+    border:1px solid var(--line);border-radius:18px;padding:22px 26px;margin-bottom:30px}
+  .positioning h3{font-size:18px;margin-bottom:4px}
+  .positioning .p-sub{color:var(--sub);font-size:13.5px;margin-bottom:14px;line-height:1.7}
+  .positioning .reasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+  .positioning .reason{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:13px 15px;font-size:13.5px;line-height:1.65;color:var(--text)}
+  .positioning .reason b{color:var(--cyan)}
+  .positioning .reason .ic{font-size:18px;margin-right:6px}
+  .positioning .who{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .positioning .who span{font-size:12.5px;padding:5px 12px;border-radius:20px;background:rgba(10,108,255,.12);
+    border:1px solid rgba(10,108,255,.3);color:var(--cyan)}
+
+  /* 步骤条 */
+  .steps{display:flex;gap:16px;margin-bottom:36px;flex-wrap:wrap}
+  .step{flex:1;min-width:220px;background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:18px 22px;cursor:pointer;transition:.2s;position:relative}
+  .step:hover{border-color:var(--cyan)}
+  .step.active{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 0 24px rgba(10,108,255,.25)}
+  .step .n{font-size:13px;color:var(--sub)}
+  .step .t{font-size:20px;font-weight:600;margin-top:5px}
+  .step.active .t{color:var(--cyan)}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:38px 40px;
+    backdrop-filter:blur(8px)}
+  .card h2{font-size:24px;margin-bottom:8px}
+  .card .desc{color:var(--sub);font-size:16px;margin-bottom:26px}
+  .panel{display:none}
+  .panel.show{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* 步骤1 输入 */
+  textarea{width:100%;min-height:240px;background:var(--bg2);border:1px solid var(--line);
+    border-radius:14px;color:var(--text);padding:18px;font-size:16px;font-family:inherit;resize:vertical;line-height:1.8}
+  textarea::placeholder{color:#5d6a8a}
+  .upload{margin-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .up-btn{background:linear-gradient(135deg,var(--violet),var(--cyan));color:#fff;font-weight:700;
+    border:none;border-radius:980px;padding:12px 22px;cursor:pointer;font-size:15px;box-shadow:0 4px 16px rgba(10,108,255,.22)}
+  .up-btn:hover{opacity:.92}
+  .up-name{font-size:14px;color:var(--green)}
+  .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;align-items:center}
+  .chip{font-size:13px;padding:7px 14px;border:1px solid var(--line);border-radius:20px;
+    background:var(--bg2);color:var(--sub);cursor:pointer;transition:.15s}
+  .chip.on{background:rgba(10,108,255,.12);border-color:#0a6cff;color:#0a6cff}
+
+  .btn-row{display:flex;justify-content:space-between;margin-top:28px}
+  .btn{background:linear-gradient(135deg,var(--violet),var(--cyan));color:#fff;font-weight:700;
+    border:none;border-radius:980px;padding:13px 28px;cursor:pointer;font-size:15px;box-shadow:0 4px 16px rgba(10,108,255,.22)}
+  .btn:hover{opacity:.92}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text);box-shadow:none}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+
+  /* 步骤2 诊断 */
+  .diag{display:grid;grid-template-columns:420px 1fr;gap:34px}
+  @media(max-width:900px){.diag{grid-template-columns:1fr}}
+  .radar-box{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:18px;
+    display:grid;place-items:center}
+  .dir-card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px;
+    border-left:3px solid var(--cyan);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+  .dir-card .name{font-weight:700;font-size:19px}
+  .dir-card .match{float:right;color:var(--green);font-weight:700;font-size:15px}
+  .dir-card .why{color:var(--sub);font-size:15px;margin-top:10px;line-height:1.8}
+  .badge{display:inline-block;font-size:12px;padding:3px 10px;border-radius:8px;background:rgba(10,108,255,.2);
+    color:var(--violet);margin-right:6px;margin-top:10px}
+  .ai-tag{display:inline-block;font-size:12px;color:var(--cyan);background:rgba(10,108,255,.12);
+    border:1px solid rgba(10,108,255,.3);border-radius:8px;padding:4px 10px;margin-bottom:12px}
+  .dir-sec{font-size:16px;font-weight:700;color:var(--text);margin:26px 0 14px;padding:10px 0;
+    border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .dir-sec:first-child{margin-top:0}
+  .dir-sec span{font-size:11px;font-weight:400;color:var(--sub);background:rgba(255,255,255,.08);padding:4px 10px;border-radius:8px}
+  .job-btn{margin-top:12px;font-size:13px;padding:7px 14px;background:rgba(10,108,255,.1);border:1px solid rgba(10,108,255,.35);
+    color:var(--cyan);border-radius:10px;cursor:pointer;transition:.2s}
+  .job-btn:hover{background:rgba(10,108,255,.2)}
+  .jobs{margin-top:14px;display:none;flex-direction:column;gap:12px}
+  .jobs.open{display:flex}
+  .jobs-note{font-size:11px;color:var(--sub);margin-top:10px;opacity:.8;line-height:1.6}
+  .rpa-log{font-size:13px;color:var(--sub);margin-bottom:12px;padding:11px 13px;background:var(--bg);border:1px solid var(--line);border-radius:10px;line-height:1.75}
+  .rpa-log .ok{color:var(--green)}
+  .rpa-log .warn{color:var(--amber)}
+  .job-card{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;transition:.2s}
+  .job-card:hover{border-color:rgba(10,108,255,.4)}
+  .job-card .jtop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+  .job-card .jtitle{font-weight:700;font-size:16px;color:var(--text);line-height:1.4}
+  .job-card .jsal{color:var(--green);font-weight:700;font-size:15px;white-space:nowrap}
+  .job-card .jmeta{font-size:13px;color:var(--sub);margin-bottom:10px;display:flex;flex-wrap:wrap;gap:8px}
+  .job-card .jmeta span{display:inline-flex;align-items:center;gap:4px}
+  .job-card .jcompany{font-weight:600;color:var(--text);font-size:14px;margin-bottom:4px}
+  .job-card .jextra{font-size:12px;color:var(--sub);margin-bottom:10px}
+  .job-card .jtags{margin:10px 0}
+  .job-card .jtags span{font-size:11px;padding:3px 8px;border-radius:6px;background:rgba(10,108,255,.15);color:var(--violet);margin-right:6px}
+  .job-card .jdesc{font-size:13px;color:var(--sub);line-height:1.7;max-height:120px;overflow:auto;margin-bottom:12px}
+  .job-card .jfooter{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+  .job-card .jsource{font-size:11px;color:var(--sub)}
+  .job-card .jsource-link{font-size:11px;color:var(--cyan);text-decoration:none;border-bottom:1px solid transparent;transition:.2s}
+  .job-card .jsource-link:hover{border-bottom-color:var(--cyan);color:#fff}
+  .job-card .juse{font-size:13px;padding:7px 14px;background:linear-gradient(135deg,var(--violet),var(--cyan));border:none;color:#fff;border-radius:10px;cursor:pointer;font-weight:600}
+  .job-btn:disabled{opacity:.6;cursor:not-allowed}
+  .more-jobs-btn{margin-top:10px;font-size:13px;padding:8px 16px;background:transparent;border:1px solid var(--line);
+    color:var(--sub);border-radius:10px;cursor:pointer;transition:.2s;width:100%;text-align:center}
+  .more-jobs-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+  .more-jobs-btn:disabled{opacity:.5;cursor:not-allowed;border-color:var(--line);color:var(--sub)}
+
+  /* 跳转式岗位推荐：关键词 chips + BOSS 直达 */
+  .kw-hint{font-size:12px;color:var(--sub);margin-bottom:10px;line-height:1.7;opacity:.9}
+  .kw-chips{display:flex;flex-wrap:wrap;gap:8px}
+  .kw-chip{display:inline-flex;align-items:center;gap:4px;font-size:13px;padding:6px 13px;background:var(--bg);
+    border:1px solid rgba(10,108,255,.35);border-radius:20px;color:var(--cyan);text-decoration:none;transition:.2s;line-height:1.5}
+  .kw-chip:hover{background:rgba(10,108,255,.15);border-color:var(--cyan);color:#fff}
+  .kw-chip .kw-arrow{font-size:11px;opacity:.8}
+  .boss-link{display:inline-block;margin-top:12px;font-size:13px;padding:8px 16px;
+    background:linear-gradient(135deg,var(--violet),var(--cyan));border:none;color:#fff;border-radius:10px;
+    cursor:pointer;font-weight:600;text-decoration:none;transition:.2s}
+  .boss-link:hover{opacity:.9}
+  .boss-link .bx{font-size:11px;opacity:.85}
+
+  /* 真实在招岗位卡片（采集数据展示） */
+  .realjobs{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+  .realjob-card{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;transition:.2s}
+  .realjob-card:hover{border-color:rgba(10,108,255,.4)}
+  .realjob-card .rjt{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .realjob-card .rjt b{font-size:14px;color:var(--text);line-height:1.4;font-weight:600}
+  .realjob-card .rjs{color:var(--green);font-size:13px;white-space:nowrap;font-weight:600}
+  .realjob-card .rjc{font-size:12px;color:var(--sub);margin:3px 0 6px;line-height:1.5}
+  .realjob-card .rjlink{font-size:12px;color:var(--cyan);text-decoration:none;border-bottom:1px solid transparent;transition:.2s}
+  .realjob-card .rjlink:hover{border-bottom-color:var(--cyan);color:#fff}
+  .realjob-card .rjbtns{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+  .realjob-card .rjset{font-size:12px;padding:5px 11px;background:rgba(10,108,255,.1);border:1px solid rgba(10,108,255,.35);color:var(--cyan);border-radius:8px;cursor:pointer;transition:.2s;font-weight:600;white-space:nowrap}
+  .realjob-card .rjset:hover{background:rgba(10,108,255,.22);color:#fff;border-color:var(--cyan)}
+  .realjob-card .rjset.done{background:rgba(0,180,80,.15);border-color:rgba(0,180,80,.45);color:var(--green);pointer-events:none}
+  .realjobs-empty{font-size:12px;color:var(--sub);opacity:.85}
+
+  /* 移动端适配 */
+  @media (max-width: 640px) {
+    .wrap{width:100%;padding:0 12px;box-sizing:border-box}
+    .dir-card{padding:14px}
+    .dir-card .name{font-size:17px;line-height:1.45}
+    .dir-card .match{float:none;display:inline-block;font-size:13px;margin-bottom:6px}
+    .dir-card .why{font-size:14px;line-height:1.7}
+    .dir-card .badge{font-size:12px}
+    .kw-hint{font-size:12px;line-height:1.7}
+    .kw-chips{gap:6px}
+    .kw-chip{font-size:12px;padding:5px 10px;line-height:1.4}
+    .boss-link{font-size:12px;padding:7px 12px;white-space:normal;line-height:1.5;word-break:keep-all}
+    .boss-link .bx{display:inline-block;margin-left:2px}
+    .realjob-card{padding:10px}
+    .realjob-card .rjt{flex-direction:column;align-items:flex-start;gap:4px}
+    .realjob-card .rjs{align-self:flex-start;font-size:13px}
+    .realjob-card .rjc{font-size:12px}
+    .realjob-card .rjbtns{flex-direction:column;align-items:flex-start;gap:6px}
+    .realjob-card .rjset{width:100%;text-align:center;padding:6px 10px}
+    .more-jobs-btn{font-size:12px;padding:7px 12px}
+    .radar-box{padding:14px}
+    .radar-box svg{width:100%;height:auto;max-width:320px;margin:0 auto;display:block}
+    .card{padding:18px}
+    .desc{font-size:14px;line-height:1.7}
+    .btn-row{flex-direction:column;gap:10px}
+    .btn-row .btn{width:100%}
+  }
+
+  /* 步骤3 简历 */
+  .jd-box{margin-bottom:22px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:20px 24px}
+  .jd-box label{display:block;font-size:14px;color:var(--sub);margin-bottom:10px}
+  .jd-edit{width:100%;min-height:360px;background:var(--bg);border:1px solid var(--line);
+    border-radius:12px;color:var(--text);padding:16px;font-size:15px;font-family:inherit;line-height:1.7;resize:vertical}
+  .jd-edit:focus{outline:none;border-color:var(--cyan)}
+  .jd-upload{margin-top:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .jd-upload .up-btn{font-size:14px;padding:9px 16px}
+  .jd-upload .up-name{font-size:13px;color:var(--green)}
+  .jd-img-prev{margin-top:14px;display:none;align-items:flex-start;gap:14px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .jd-img-prev.show{display:flex}
+  .jd-img-prev img{width:160px;max-height:200px;object-fit:contain;border-radius:8px;background:#000}
+  .jd-img-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+  .jd-img-actions .job-btn{margin-top:0}
+  /* 多文件 JD 缩略图网格 */
+  .jd-thumbs{margin-top:14px;display:none;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+  .jd-thumbs.show{display:grid}
+  .jd-thumb{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:8px}
+  .jd-thumb img{width:100%;height:130px;object-fit:contain;border-radius:8px;background:#000}
+  .jd-thumb .tname{font-size:11.5px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .jd-thumb .tactions{display:flex;gap:6px}
+  .jd-thumb .tactions button{font-size:11.5px;padding:5px 8px;flex:1}
+  .jd-thumb .badge-ocr{font-size:10.5px;color:var(--green);min-height:14px}
+  /* STEP3 左右结构：左侧 JD 输入 / 右侧改写输出 */
+  .resume-row{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:stretch;margin-bottom:22px}
+  @media(max-width:900px){.resume-row{grid-template-columns:1fr;gap:24px}}
+  .resume-row .jd-box{margin-bottom:0}
+  .resume-row .resume{grid-template-columns:1fr;gap:0;margin-bottom:0}
+  .resume{display:grid;grid-template-columns:1fr;gap:30px}
+  @media(max-width:900px){.resume{grid-template-columns:1fr}}
+  .rcol{border:1px solid var(--line);border-radius:16px;padding:26px 28px;background:var(--bg2)}
+  .rcol.new{border-color:rgba(52,211,153,.4)}
+  .rcol h4{font-size:18px;margin-bottom:16px}
+  .rcol.new h4{color:var(--green)}
+  .hl{background:rgba(52,211,153,.18);border-radius:4px;padding:0 3px;color:var(--green);font-weight:600}
+  .resume-out{font-size:16px;line-height:1.9;color:var(--text)}
+  .rewrite-btn{font-size:16px;padding:14px 20px;width:100%;margin-top:16px}
+  .ai-tip{margin-top:18px;font-size:12.5px;color:var(--sub);line-height:1.75;background:var(--bg2);
+    border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .ai-tip b{color:var(--text)}
+  .copy-btn{font-size:13px;padding:8px 14px;background:transparent;border:1px solid var(--line);color:var(--sub);border-radius:8px;cursor:pointer;transition:.2s}
+  .copy-btn:hover{border-color:var(--green);color:var(--green)}
+  .copy-row{display:flex;justify-content:flex-end;margin-bottom:10px}
+  /* 改写后结构化简历 */
+  .r-target{font-size:14px;color:var(--sub);margin-bottom:16px;padding:11px 15px;background:rgba(52,211,153,.08);
+    border:1px solid rgba(52,211,153,.25);border-radius:10px;line-height:1.7}
+  .r-sec{margin-bottom:20px}
+  .r-sec-h{font-size:17px;font-weight:700;color:var(--cyan);margin-bottom:10px}
+  .r-entry{margin:0 0 14px 2px;padding-left:14px;border-left:2px solid rgba(10,108,255,.35)}
+  .r-entry-h{font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px;opacity:.92}
+  .r-list{margin:0;padding-left:22px}
+  .r-list li{font-size:16px;line-height:1.9;color:var(--text);margin-bottom:7px}
+  .r-label{font-size:13px;font-weight:700;color:var(--cyan);margin:12px 0 5px}
+  .r-desc{font-size:14px;line-height:1.75;color:var(--text);margin:2px 0}
+  .r-preserve{margin-top:8px}
+  .r-preserve-note{font-size:12px;color:var(--green);margin-bottom:8px}
+  .r-preserve-item{font-size:15px;line-height:1.85;color:var(--text);margin-bottom:6px;
+    padding:7px 11px;background:var(--bg);border:1px solid var(--line);border-radius:8px}
+
+  /* 生成的简历：严格参照「个人简历模板.docx」的 5 段式结构，白底专业排版，可直接投递 */
+  .resume-paper{max-width:820px;margin:18px auto;background:#fff;color:#1f2937;border:1px solid #e5e7eb;border-radius:12px;padding:34px 42px;box-shadow:0 10px 35px rgba(0,0,0,.28)}
+  .rp{color:#1f2937;font-family:'Microsoft YaHei','PingFang SC',SimSun,sans-serif}
+  .rp-name{font-size:26px;font-weight:800;color:#0f172a;letter-spacing:3px;text-align:center;margin-bottom:4px}
+  .rp-contact{font-size:13px;color:#475569;text-align:center;margin-top:4px;padding-bottom:12px;border-bottom:2px solid #0ea5e9}
+  .rp-contact .rp-ci{margin:0 6px}
+  .rp-sec{margin-top:20px}
+  .rp-sec-h{font-size:16px;font-weight:700;color:#0369a1;border-bottom:1px solid #cbd5e1;padding-bottom:5px;margin-bottom:10px;letter-spacing:1px}
+  .rp-intent{font-size:14px;color:#334155;margin-top:4px}
+  .rp-intent b{color:#0e7490}
+  .rp-sub{margin:10px 0 2px}
+  .rp-period{font-weight:600;color:#334155}
+  .rp-org{font-weight:700;color:#0f172a;margin-left:12px}
+  .rp-role{font-size:13px;color:#64748b;margin:2px 0 2px}
+  .rp-line{font-size:14px;color:#334155;line-height:1.7}
+  .rp-label{font-weight:600;color:#334155;margin-top:6px}
+  .rp-desc{font-size:14px;color:#334155;line-height:1.8;margin:2px 0 2px}
+  ol.rp-list{margin:2px 0 4px;padding-left:22px}
+  ol.rp-list li{font-size:14px;line-height:1.85;color:#1f2937;margin-bottom:4px}
+  .rp-list b{color:#0e7490}
+
+  /* 步骤4 路径 */
+  .phase{border:1px solid var(--line);border-radius:16px;padding:20px 24px;margin-bottom:16px;background:var(--bg2)}
+  .phase .ph{font-weight:700;color:var(--cyan);font-size:18px;margin-bottom:12px}
+  .phase ul{list-style:none}
+  .phase li{font-size:17px;color:var(--text);padding:7px 0 7px 24px;position:relative;line-height:1.7}
+  .phase li:before{content:"▹";position:absolute;left:0;color:var(--violet)}
+  .ph-res{font-size:13.5px;color:var(--amber);margin:14px 0 4px;font-weight:600}
+  .res-list{list-style:none;margin:0 0 4px}
+  .res-list li{font-size:14px;color:var(--sub);padding:5px 0 5px 22px;position:relative;line-height:1.65}
+  .res-list li:before{content:"🔗";position:absolute;left:0;font-size:12px}
+  .res-list a.res-link{color:var(--cyan);text-decoration:underline;word-break:break-all}
+  .res-list a.res-link:hover{color:var(--green)}
+  .ph-actions{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+  .more-res-btn{background:var(--bg2);border:1px solid var(--cyan);color:var(--cyan);padding:6px 14px;border-radius:8px;font-size:14px;cursor:pointer;transition:all .2s}
+  .more-res-btn:hover{background:var(--cyan);color:#fff}
+  .more-res-btn:disabled{opacity:.6;cursor:wait}
+  .more-res-status{font-size:13px;color:var(--green);font-weight:600}
+  .path-start{text-align:center;padding:24px 12px;border:1px dashed var(--line);border-radius:14px;background:var(--bg2)}
+  .path-progress{padding:30px 14px;text-align:center;border:1px solid var(--line);border-radius:14px;background:var(--bg2)}
+  .pp-bar{height:10px;background:rgba(10,108,255,.12);border-radius:6px;overflow:hidden;margin-bottom:14px;max-width:480px;margin-left:auto;margin-right:auto}
+  .pp-fill{height:100%;width:0;background:linear-gradient(90deg,#0a6cff,#34d399);border-radius:6px;transition:width .6s ease}
+  .pp-step{font-size:14px;color:var(--sub);font-weight:500}
+  /* STEP4 技能对比 */
+  .skill-gap{border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:18px;background:linear-gradient(180deg,var(--bg2),var(--bg));
+    border-left:4px solid var(--cyan)}
+  .skill-gap .sg-h{font-size:18px;font-weight:700;color:var(--cyan);margin-bottom:6px}
+  .skill-gap .sg-sub{font-size:13px;color:var(--sub);margin-bottom:16px;line-height:1.6}
+  .sg-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:720px){.sg-cols{grid-template-columns:1fr}}
+  .sg-col{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--bg)}
+  .sg-col.have{border-color:rgba(52,211,153,.4)}
+  .sg-col.need{border-color:rgba(248,113,113,.45)}
+  .sg-col h4{font-size:15px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .sg-col.have h4{color:var(--green)}
+  .sg-col.need h4{color:var(--red)}
+  .sg-tags{display:flex;flex-wrap:wrap;gap:8px}
+  .sg-tag{font-size:14px;padding:5px 12px;border-radius:20px;line-height:1.4}
+  .sg-col.have .sg-tag{background:rgba(52,211,153,.14);color:var(--green);border:1px solid rgba(52,211,153,.3)}
+  .sg-col.need .sg-tag{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+  .sg-empty{font-size:13px;color:var(--sub)}
+
+  /* Modal */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+    display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+  .modal-overlay.show{display:flex}
+  .modal{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:26px;width:100%;max-width:480px;
+    box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .modal h3{font-size:18px;margin-bottom:10px}
+  .modal p{color:var(--sub);font-size:14px;line-height:1.7;margin-bottom:18px}
+  .key-input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--text);
+    padding:12px 14px;font-size:14px;font-family:inherit;margin-bottom:16px}
+  .key-input:focus{outline:none;border-color:var(--violet)}
+  .modal-btns{display:flex;gap:12px;justify-content:flex-end}
+  .modal-btns .btn{padding:11px 20px;font-size:14px}
+  .modal-btns .ghost{background:transparent;border:1px solid var(--line);color:var(--text);box-shadow:none}
+
+  /* Loading */
+  .loading-overlay{position:fixed;inset:0;background:rgba(245,245,247,.92);backdrop-filter:blur(3px);
+    display:none;flex-direction:column;align-items:center;justify-content:center;z-index:90}
+  .loading-overlay.show{display:flex}
+  .spinner{width:52px;height:52px;border-radius:50%;border:4px solid rgba(255,255,255,.1);
+    border-top-color:var(--cyan);animation:spin 1s linear infinite;margin-bottom:16px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-overlay p{color:var(--sub);font-size:16px}
+
+  .footer{text-align:center;color:var(--sub);font-size:13px;margin-top:24px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.9.1/mammoth.browser.min.js"></script>
+<!-- 51.LA 网站统计 / 转型罗盘 @2026-08-20 -->
+<script charset="UTF-8" id="LA_COLLECT" src="https://sdk.51.la/js-sdk-pro.min.js"></script>
+<script>LA.init({id:"3QvsSgCIKZbelJky",ck:"3QvsSgCIKZbelJky",hashMode:true,autoTrack:true})</script>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="brand-left">
+      <div class="logo">罗</div>
+      <h1>转型罗盘 <span style="font-size:17px;color:var(--sub);font-weight:400">TransiCompass</span><span style="font-size:12px;color:var(--sub);font-weight:400;margin-left:8px">v1.18-08241750</span></h1>
+    </div>
+    <button class="key-btn" id="keyBtn">
+      <span class="dot" id="keyDot"></span>
+      <span id="keyLabel">DeepSeek Key</span>
+    </button>
+    <button class="key-btn" id="bzBtn" style="display:none" title="八爪鱼云采集为预留功能（需付费套餐），当前版本岗位采用跳转式">
+      <span class="dot" id="bzDot"></span>
+      <span id="bzLabel">八爪鱼 API</span>
+    </button>
+  </div>
+  <div class="sub">专为 <b style="color:var(--cyan)">建筑 / 土木 / 工程</b> 从业者打造的转行 AI 陪跑产品 · 对话式诊断 → 简历优化 → 学习路径</div>
+  <div class="trust">
+    <span>🔒 数据仅保存在你浏览器本地</span>
+    <span>⚡ 由 DeepSeek 驱动 · 岗位直达 BOSS直聘</span>
+    <span>🏗️ 专为建筑行业转型人群设计</span>
+  </div>
+
+  <div class="steps">
+    <div class="step active" data-step="0"><div class="n">STEP 1</div><div class="t">自我描述 & 简历</div></div>
+    <div class="step" data-step="1"><div class="n">STEP 2</div><div class="t">AI 定位诊断</div></div>
+    <div class="step" data-step="2"><div class="n">STEP 3</div><div class="t">简历优化</div></div>
+    <div class="step" data-step="3"><div class="n">STEP 4</div><div class="t">学习路径规划</div></div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="panel show" data-panel="0">
+    <div class="card">
+      <h2>① 你是谁 / 你想去哪</h2>
+      <div class="desc">用大白话描述你的背景与困惑，或上传简历。AI 据此做定位诊断。点下面的标签可以快速补充关键词。</div>
+      <textarea id="selfdesc" class="auto-clear" placeholder="例：10年建筑工程管理，做过房建/市政/厂房，熟悉招投标、供应链、甲方对接，带过12人管理团队。现在想转行但不知道去哪、简历也不会写……">11年建筑工程管理经验，主做房建、市政、工业厂房，从投标到交付全周期。擅长招投标/商务报价、供应链管理、甲方客户对接，带过12人管理团队、300+现场人员。现在行业下行想转型，目标方向偏产品/新能源，但不知道怎么努力，简历也不会写。</textarea>
+      <div class="upload">
+        <button class="up-btn" id="upBtn">📎 上传简历（txt / PDF / Word）</button>
+        <input type="file" id="fileIn" accept=".txt,.pdf,.doc,.docx" style="display:none">
+        <span class="up-name" id="upName"></span>
+      </div>
+      <div class="row">
+        <span style="font-size:14px;color:var(--sub)">快速标签：</span>
+        <span class="chip on" data-t="施工管理">施工管理</span>
+        <span class="chip on" data-t="招投标">招投标</span>
+        <span class="chip on" data-t="供应链">供应链</span>
+        <span class="chip" data-t="现场执行">现场执行</span>
+        <span class="chip" data-t="BIM">BIM</span>
+        <span class="chip" data-t="新能源">新能源</span>
+        <span class="chip" data-t="甲方对接">甲方对接</span>
+        <span class="chip" data-t="团队管理">团队管理</span>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn ghost" disabled>← 上一步</button>
+      <button class="btn" id="toStep2">AI 开始诊断 →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="panel" data-panel="1">
+    <div class="card">
+      <h2>② AI 定位诊断</h2>
+      <div class="desc">基于你的工程背景，AI 提取了 6 项可迁移能力，并匹配出最适配的转型方向。每个方向卡给出<b style="color:var(--cyan)">贴合你简历的岗位搜索关键词</b>，点击直达 BOSS直聘 查看真实在招岗位；把心仪岗位的 JD 复制到下一步，即可一键优化简历。</div>
+      <div class="diag">
+        <div class="radar-box">
+          <svg id="radar" viewBox="0 0 380 380" width="380" height="380"></svg>
+          <div style="font-size:11px;color:var(--sub);text-align:center;margin-top:4px">能力雷达（工程→产品 适配度）</div>
+        </div>
+        <div id="dirList">
+          <!-- AI 动态生成方向卡 -->
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn ghost" data-back="1">← 上一步</button>
+      <button class="btn" data-next="1">优化我的简历 →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="panel" data-panel="2">
+    <div class="card">
+      <h2>③ 简历优化</h2>
+      <div class="desc">左侧填入你想投递的<b style="color:var(--cyan)">目标岗位 JD</b>（在 STEP2 用搜索关键词直达 BOSS直聘 找到心仪岗位，复制其 JD 粘贴到这里 / 手动粘贴招聘要求 / 上传 JD 截图识别）；右侧点击「一键 AI 改写」，按目标岗位 JD 用 <b style="color:var(--cyan)">STAR 法则</b>（情境-任务-行动-结果）逐条改写你的工作 / 项目经历并<b style="color:var(--green)">高亮可迁移能力</b>。<b style="color:var(--green)">右侧只展示 AI 改写后的经历内容，不放入你上传的原始简历框架</b>。</div>
+      <div class="resume-row">
+        <div class="jd-box">
+          <label>🎯 目标岗位 JD（在 STEP2 直达 BOSS直聘 复制心仪岗位的 JD 粘贴到这里；也可手动粘贴招聘要求，或上传多张 JD 图片 / PDF 自动识别）</label>
+          <textarea id="jdInput" class="jd-edit auto-clear" placeholder="粘贴招聘 JD，例如：产品经理——负责 AI 产品需求分析、PRD 撰写、跨部门协调推动版本落地，有项目管理与商业sense 优先……"></textarea>
+          <div class="jd-upload">
+            <button type="button" class="up-btn" id="jdUpBtn">📎 上传 JD 图片 / PDF（可多张）</button>
+            <input type="file" id="jdImgIn" accept="image/*,application/pdf" multiple style="display:none">
+            <span class="up-name" id="jdImgName"></span>
+            <button type="button" class="copy-btn" id="jdClearAll" style="display:none">🗑 清空全部</button>
+          </div>
+          <div class="jd-thumbs" id="jdThumbs"></div>
+        </div>
+        <div class="resume">
+          <div class="rcol new" style="min-height:460px">
+            <h4>✓ 改写后的岗位简历（针对目标岗位 JD）</h4>
+            <div class="copy-row">
+              <button class="copy-btn" id="copyBtn">📋 复制纯文本</button>
+              <button class="copy-btn" id="copyHtmlBtn">📋 复制带格式（可直接粘进 Word）</button>
+            </div>
+            <div id="resumeNew" class="resume-out" style="color:var(--sub);font-size:14px">点击「一键 AI 改写」后，这里会按目标岗位 JD 展示 AI 改写好的工作 / 项目经历（STAR 法则逐条 + 高亮）。</div>
+            <button class="btn rewrite-btn" id="rewriteBtn">✨ 一键 AI 改写</button>
+          </div>
+        </div>
+      </div>
+      <div class="ai-tip">
+        💡 <b style="color:var(--text)">AI 提示</b>：改写基于你在 STEP1 填写的背景 / 简历，工作经历 / 项目经历会按目标岗位 JD 用 <b style="color:var(--cyan)">STAR 法则</b>（情境-任务-行动-结果）逐条改写，并高亮可迁移能力；公司名、项目名、任职时间、板块结构全部保留。<b style="color:var(--green)">右侧预览只展示 AI 改写后的经历内容（不含你上传的原始简历框架）</b>；点击「复制 / 导出」会输出含基本信息的完整可投递简历。建议先在 STEP1 粘贴完整简历（含 1·2·3·4 的职责描述），改写效果最精准。
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn ghost" data-back="2">← 上一步</button>
+      <button class="btn" data-next="2">制定学习路径 →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="panel" data-panel="3">
+    <div class="card">
+      <h2>④ 学习路径规划</h2>
+      <div class="desc">AI 会根据你在 STEP3 选定的<b style="color:var(--cyan)">目标岗位 JD</b> 与改写后的简历，先做一次<b style="color:var(--green)">技能盘点</b>（你已具备 / 待补齐），再定制 3 阶段学习路径——下方内容由 DeepSeek 实时生成（无 Key 时回退本地模板）。</div>
+      <div id="gapOut">
+        <div style="color:var(--sub);font-size:14px">点击下方「开始定制」按钮后，会先对比目标岗位与你的简历，列出「已具备技能」和「待补齐技能」……</div>
+      </div>
+      <h3 style="font-size:17px;color:var(--text);margin:26px 0 14px">📚 三阶段学习路径</h3>
+      <div id="pathOut">
+        <div class="path-start" id="pathStartBox">
+          <div style="font-size:15px;color:var(--sub);margin-bottom:14px">下方依次为阶段一 / 阶段二 / 阶段三，每阶段说明「该做什么、产出什么」。点击下方按钮让 AI 开始定制（不会自动调用，避免无谓消耗）。</div>
+          <button class="btn" id="pathStartBtn">🚀 开始定制学习路径</button>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn ghost" data-back="3">← 上一步</button>
+      <button class="btn" id="exportBtn">📄 导出 Word 简历</button>
+      <button class="btn ghost" id="feedbackBtn">💬 意见反馈</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    接入Deepseek API · 真实转型辅助 · 转型罗盘立项组
+  </div>
+</div>
+
+<!-- 设置 Key Modal -->
+<div class="modal-overlay" id="keyModal">
+  <div class="modal">
+    <h3>设置 DeepSeek API Key</h3>
+    <p>Key 仅保存在浏览器本地（localStorage），不会上传到我们服务器。没有 Key 可去 deepseek.com 申请。</p>
+    <div class="trial-remain" id="keyTrial">DeepSeek API 试用次数加载中…</div>
+    <input class="key-input" id="keyInput" type="password" placeholder="sk-xxxxxxxxxxxxxxxx">
+    <div class="modal-btns">
+      <button class="btn ghost" id="clearKey">清除</button>
+      <button class="btn ghost" id="cancelKey">取消</button>
+      <button class="btn" id="saveKey">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 八爪鱼云采集 API 配置 Modal -->
+<div class="modal-overlay" id="bzModal">
+  <div class="modal">
+    <h3>配置八爪鱼云采集 API（预留）</h3>
+    <p>当前版本岗位推荐采用<b style="color:var(--cyan)">跳转式</b>：直接跳转 BOSS直聘 搜索，无需配置采集。以下为<b>预留入口</b>，若未来升级八爪鱼旗舰+/企业版/团队版套餐，可启用云采集在站内直接展示真实在招岗位。凭证仅保存在浏览器本地（localStorage），不会上传我们服务器。</p>
+    <p style="font-size:13px;color:var(--sub);line-height:1.7;margin-bottom:14px">还没有八爪鱼 API？<a href="https://www.bazhuayu.com/docs/zh/api-reference/intro" target="_blank" rel="noopener noreferrer" style="color:var(--cyan);text-decoration:underline">查看八爪鱼开放 API 官方文档 →</a>（了解如何申请 Key、创建任务并获取 taskId）</p>
+    <div class="trial-remain" id="bzTrial">八爪鱼云采集 API 试用次数加载中…</div>
+    <label style="font-size:13px;color:var(--sub);display:block;margin-bottom:6px">API Key（x-api-key，形如 op_sk_xxxx）</label>
+    <input class="key-input" id="bzApiKey" type="password" placeholder="op_sk_xxxxxxxx">
+    <label style="font-size:13px;color:var(--sub);display:block;margin:14px 0 6px">或 Access Token（Bearer）</label>
+    <input class="key-input" id="bzToken" type="password" placeholder="eyJ...（Bearer 内容）">
+    <label style="font-size:13px;color:var(--sub);display:block;margin:14px 0 6px">任务 ID（taskId · Boss 岗位采集任务）</label>
+    <input class="key-input" id="bzTaskId" type="text" placeholder="6bb3b0c8-1e1d-...（任务列表右键→任务ID(API)）">
+    <div class="modal-btns">
+      <button class="btn ghost" id="bzClear">清除</button>
+      <button class="btn ghost" id="bzCancel">取消</button>
+      <button class="btn" id="bzSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <p>DeepSeek 正在分析你的背景和可迁移能力…</p>
+</div>
+
+<script>
+  // 能力雷达图（6维）—— 由 analyze() 根据用户输入动态计算
+  let dims=[
+    {k:"项目管理",v:75},{k:"沟通协调",v:75},{k:"供应链/采购",v:75},
+    {k:"风险控制",v:75},{k:"商务报价",v:75},{k:"现场执行",v:75}
+  ];
+  function drawRadar(){
+    const svg=document.getElementById('radar');const cx=190,cy=190,R=140;
+    const N=dims.length,step=Math.PI*2/N;let s='';
+    for(let r=1;r<=4;r++){
+      let pts=[];
+      for(let i=0;i<N;i++){const a=-Math.PI/2+i*step;pts.push((cx+Math.cos(a)*R*r/4).toFixed(1)+','+(cy+Math.sin(a)*R*r/4).toFixed(1));}
+      s+=`<polygon points="${pts.join(' ')}" fill="none" stroke="rgba(255,255,255,.08)"/>`;
+    }
+    dims.forEach((d,i)=>{
+      const a=-Math.PI/2+i*step;const x=cx+Math.cos(a)*R,y=cy+Math.sin(a)*R;
+      s+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(255,255,255,.08)"/>`;
+      const lx=cx+Math.cos(a)*(R+24),ly=cy+Math.sin(a)*(R+24);
+      s+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" fill="#8a96b8" font-size="14" text-anchor="middle" dominant-baseline="middle">${d.k}</text>`;
+    });
+    let dpts=[];
+    dims.forEach((d,i)=>{const a=-Math.PI/2+i*step;const rr=R*d.v/100;dpts.push((cx+Math.cos(a)*rr).toFixed(1)+','+(cy+Math.sin(a)*rr).toFixed(1));});
+    s+=`<polygon points="${dpts.join(' ')}" fill="rgba(10,108,255,.22)" stroke="#0a6cff" stroke-width="2"/>`;
+    dims.forEach((d,i)=>{const a=-Math.PI/2+i*step;const rr=R*d.v/100;s+=`<circle cx="${(cx+Math.cos(a)*rr).toFixed(1)}" cy="${(cy+Math.sin(a)*rr).toFixed(1)}" r="3" fill="#0a6cff"/>`;});
+    svg.innerHTML=s;
+  }
+
+  // AI 分析：基于 STEP1 输入文本，提取 6 维能力并生成 3 个推荐方向
+  function analyze(text){
+    const t=(text||'').toLowerCase();
+    const score=(keywords)=>{
+      if(!keywords.length)return 50;
+      let hit=0;
+      keywords.forEach(k=>{ if(t.includes(k.toLowerCase())) hit++; });
+      return Math.min(96, 58 + hit*8 + Math.floor(Math.random()*4));
+    };
+    const d={
+      '项目管理': score(['项目','管理','全周期','投标','交付','团队','统筹','进度','pm']),
+      '沟通协调': score(['沟通','协调','对接','甲方','客户','关系','协作','共识']),
+      '供应链/采购': score(['供应链','采购','供应商','分包','物资','材料','资源']),
+      '风险控制': score(['风险','安全','质量','管控','预案','问题','闭环']),
+      '商务报价': score(['商务','报价','成本','招投标','招标','预算','造价','利润']),
+      '现场执行': score(['现场','施工','执行','实施','工序','调度','人员','班组'])
+    };
+    const dimsOut=[
+      {k:'项目管理',v:d['项目管理']},
+      {k:'沟通协调',v:d['沟通协调']},
+      {k:'供应链/采购',v:d['供应链/采购']},
+      {k:'风险控制',v:d['风险控制']},
+      {k:'商务报价',v:d['商务报价']},
+      {k:'现场执行',v:d['现场执行']}
+    ];
+    const rankDirs=arr=>arr.map(dir=>{
+      let m=0;
+      Object.keys(dir.weights).forEach(k=> m += (d[k]||70)*dir.weights[k]);
+      return {...dir, match:Math.min(96,Math.round(m))};
+    }).sort((a,b)=>b.match-a.match);
+
+    // 本行业延续方向（低风险过渡）
+    const inDirs=[
+      {
+        name:'工程咨询 / 甲方 PMO',
+        weights:{ '项目管理':0.30,'风险控制':0.25,'现场执行':0.20,'商务报价':0.10,'沟通协调':0.10,'供应链/采购':0.05 },
+        why:'进度、成本、质量管控经验可直接平移，适合稳中求进的过渡型选择，转型风险最低。',
+        badges:['进度管控','成本意识','风险预案'],
+        kws:['甲方 PMO','工程咨询顾问','全过程咨询','监理 总监代表'],
+        color:'var(--amber)'
+      },
+      {
+        name:'建筑 / 基建 项目经理（升级）',
+        weights:{ '项目管理':0.30,'现场执行':0.20,'供应链/采购':0.15,'风险控制':0.15,'沟通协调':0.10,'商务报价':0.10 },
+        why:'把"带 300 人交付"升级为"大型复杂项目集管理"，向更高阶 PM / 项目总监路线走，原地升值。',
+        badges:['项目集管理','资源调度','交付管控'],
+        kws:['建筑项目经理','EPC 总承包','基建 项目经理','工程总监'],
+        color:'var(--cyan)'
+      }
+    ];
+    // 跨行业热点方向（新赛道）
+    const crossDirs=[
+      {
+        name:'AI 产品经理（AI Agent 方向）',
+        weights:{ '项目管理':0.30,'沟通协调':0.25,'商务报价':0.20,'风险控制':0.10,'供应链/采购':0.05,'现场执行':0.10 },
+        why:'项目全生命周期管理↔产品生命周期；甲方对接↔用户视角；商务报价↔商业模式。2026 年 AI Agent 落地爆发，最缺"懂业务 + 能把需求讲清楚"的 PM。',
+        badges:['AI Agent','需求管理','B 端产品'],
+        kws:['AI 产品经理','AI Agent 产品','大模型 产品经理','B端 AI 产品'],
+        color:'var(--violet)'
+      },
+      {
+        name:'具身智能 / 机器人 行业运营',
+        weights:{ '供应链/采购':0.25,'项目管理':0.25,'现场执行':0.20,'沟通协调':0.15,'商务报价':0.10,'风险控制':0.05 },
+        why:'机器人量产落地需要供应链 + 工程现场经验；你的采购与产线协调背景，正是具身智能从 Demo 到量产的卡点岗位。',
+        badges:['供应链','量产落地','生态合作'],
+        kws:['机器人 运营','具身智能','机器人 交付经理','机器人 量产'],
+        color:'var(--cyan)'
+      },
+      {
+        name:'低空经济（无人机 / eVTOL 运营）',
+        weights:{ '项目管理':0.25,'供应链/采购':0.20,'现场执行':0.20,'风险控制':0.20,'沟通协调':0.10,'商务报价':0.05 },
+        why:'低空基建（起降点 / 空域 / 运维）本质是"另一种工程项目"，你的施工与报批经验可直接平移，且是国家重点新赛道。',
+        badges:['低空基建','空域运营','项目报批'],
+        kws:['低空经济','eVTOL','无人机 运营','低空 基建'],
+        color:'var(--green)'
+      },
+      {
+        name:'储能 / 新能源 出海 BD',
+        weights:{ '供应链/采购':0.30,'沟通协调':0.25,'项目管理':0.20,'商务报价':0.15,'风险控制':0.05,'现场执行':0.05 },
+        why:'供应链 + 甲方关系 + 工程落地，正是储能出海 / 工商业侧项目最缺的复合背景，且享政策红利。',
+        badges:['出海','客户拓展','商务谈判'],
+        kws:['储能 出海','新能源 海外市场','储能 BD','工商业储能'],
+        color:'var(--amber)'
+      }
+    ];
+    return {dims:dimsOut, inDirs:rankDirs(inDirs), crossDirs:rankDirs(crossDirs)};
+  }
+
+  // 方向 → 搜索关键词（用于模拟 RPA 和八爪鱼数据过滤）
+  const RPA_KEYWORDS={
+    '工程咨询 / 甲方 PMO':'甲方 PMO 工程咨询',
+    '建筑 / 基建 项目经理（升级）':'建筑项目经理',
+    'AI 产品经理（AI Agent 方向）':'AI Agent 产品经理',
+    '具身智能 / 机器人 行业运营':'机器人量产运营',
+    '低空经济（无人机 / eVTOL 运营）':'低空经济运营',
+    '储能 / 新能源 出海 BD':'储能出海 BD'
+  };
+  // BOSS直聘 城市编码（与 zhipin 页面 city 参数一致）
+  const CITY_MAP={
+    '北京':'101010100','上海':'101020100','广州':'101280100','深圳':'101280600','杭州':'101210100',
+    '天津':'101030100','西安':'101110100','苏州':'101190400','武汉':'101200100','重庆':'101040100',
+    '成都':'101270100','长沙':'101250100','南京':'101190100','郑州':'101180100','东莞':'101281600',
+    '青岛':'101120200','合肥':'101220100','济南':'101120100','厦门':'101230200','宁波':'101210400',
+    '佛山':'101280800','福州':'101230100'
+  };
+  // 从用户自述/简历中提取意向城市，返回 BOSS 城市编码；找不到返回 ''（全国搜索）
+  function extractCity(text){
+    const t=String(text||'');
+    for(const name of Object.keys(CITY_MAP)){
+      if(t.indexOf(name)>=0) return CITY_MAP[name];
+    }
+    // 常见"在 X 城市 / 坐标 X"写法兜底：取第一个出现的城市名
+    const m=t.match(/(?:在|位于|坐标|base|base于|意向(?:工作)?[城地])[：:\s]*([\u4e00-\u9fa5]{2,3})(?:市)?/);
+    if(m) return CITY_MAP[m[1].replace(/市$/,'')]||'';
+    return '';
+  }
+  // 生成 BOSS直聘 搜索链接（关键词 + 可选城市）
+  function bossUrl(kw, cityCode){
+    const q=encodeURIComponent(String(kw||''));
+    return 'https://www.zhipin.com/web/geek/job?query='+q+(cityCode?('&city='+cityCode):'');
+  }
+  // 方向 → 搜索关键词：优先 AI 生成（dir.kws），否则用本地映射/方向名兜底
+  function dirKws(dir){
+    if(dir && Array.isArray(dir.kws)){
+      const arr=dir.kws.map(s=>String(s).trim()).filter(s=>s.length>=2);
+      if(arr.length) return arr.slice(0,5);
+    }
+    const name=dir&&dir.name?String(dir.name):'';
+    if(name && RPA_KEYWORDS[name]) return RPA_KEYWORDS[name].split(/\s+/).filter(s=>s.length>=2);
+    if(name) return [name];
+    return ['目标岗位'];
+  }
+  // 用户意向城市（BOSS 编码），诊断开始时从自述/简历提取
+  let cityCode='';
+
+  // ===== 真实在招岗位数据（jobs_data.json，随站点部署）=====
+  let jobsData=null;
+  function loadJobsData(){
+    fetch('jobs_data.json')
+      .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+      .then(d=>{ jobsData=d; fillRealJobs(); })
+      .catch(()=>{ jobsData=null; });
+  }
+  // 按方向名匹配岗位数据（精确→包含→关键词兜底→null）
+  function dirJobs(dirName){
+    if(!jobsData || !jobsData.directions) return null;
+    const ds=jobsData.directions;
+    const n=String(dirName||'');
+    if(ds[n]) return ds[n];
+    for(const k in ds){
+      if(n.indexOf(k)>=0 || k.indexOf(n)>=0) return ds[k];
+    }
+    const CORE=[
+      ['AI',['AI 产品经理（AI Agent 方向）']],
+      ['储能',['储能 / 新能源 出海 BD']],
+      ['机器人',['具身智能 / 机器人 行业运营']],
+      ['具身',['具身智能 / 机器人 行业运营']],
+      ['低空',['低空经济（无人机 / eVTOL 运营）']],
+      ['无人机',['低空经济（无人机 / eVTOL 运营）']],
+      ['BIM',['BIM / 智能建造']],
+      ['工程',['建筑 / 基建 项目经理（升级）']],
+      ['建筑',['建筑 / 基建 项目经理（升级）']]
+    ];
+    for(const pair of CORE){
+      if(n.indexOf(pair[0])>=0){
+        for(const k of pair[1]){ if(ds[k]) return ds[k]; }
+      }
+    }
+    return null;
+  }
+  // 单个真实岗位卡片
+  function realJobCard(j){
+    const link=(j&&j.link)||'#';
+    const jobData=encodeURIComponent(JSON.stringify({title:j.title||'',company:j.company||'',salary:j.salary||'',city:j.city||'',source:j.source||'',link:link}));
+    return `<div class="realjob-card">
+      <div class="rjt"><b>${escapeHtml(j.title||'')}</b><span class="rjs">${escapeHtml(j.salary||'')}</span></div>
+      <div class="rjc">${escapeHtml(j.company||'')} · ${escapeHtml(j.city||'')} · 来源 ${escapeHtml(j.source||'')}</div>
+      <div class="rjbtns">
+        <a class="rjlink" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">查看 JD ↗</a>
+        <button class="rjset" data-job="${jobData}">设为目标岗位 →</button>
+      </div>
+    </div>`;
+  }
+  // 渲染某方向真实岗位（每批 5 条，"更多岗位"继续加载）
+  function renderRealJobs(dirName, card, page){
+    const jobs=dirJobs(dirName);
+    const box=card.querySelector('.realjobs');
+    if(!jobs || !box) return;
+    const PAGE=5;
+    const slice=jobs.slice(page, page+PAGE);
+    if(!slice.length){ box.insertAdjacentHTML('beforeend','<div class="realjobs-empty">已展示全部岗位</div>'); return; }
+    const html=slice.map(realJobCard).join('');
+    if(page===0) box.innerHTML=html; else box.insertAdjacentHTML('beforeend', html);
+    box.querySelectorAll('.more-jobs-btn').forEach(b=>b.remove());
+    if((page+PAGE)<jobs.length){
+      const more=document.createElement('button');
+      more.className='more-jobs-btn';
+      more.dataset.dir=encodeURIComponent(dirName);
+      more.dataset.page=String(page+PAGE);
+      more.textContent='🔽 更多岗位（再加载 5 条）';
+      box.appendChild(more);
+    } else {
+      box.insertAdjacentHTML('beforeend','<div class="realjobs-empty">已展示全部岗位（点击标题可查看 JD）</div>');
+    }
+  }
+  // 诊断渲染完成后，为每个方向卡填充真实岗位
+  function fillRealJobs(){
+    if(!jobsData) return;
+    document.querySelectorAll('.dir-card').forEach(card=>{
+      const box=card.querySelector('.realjobs');
+      if(!box) return;
+      const nameEl=card.querySelector('.name');
+      const dirName=nameEl?nameEl.textContent.replace(/^\d+\.\s*/,'').replace(/^🔥\s*/,'').trim():'';
+      const jobs=dirJobs(dirName);
+      if(!jobs || !jobs.length){
+        box.innerHTML='<div class="realjobs-empty">该方向暂无采集数据，用下方关键词直达招聘平台搜索。</div>';
+        return;
+      }
+      renderRealJobs(dirName, card, 0);
+    });
+  }
+  // "更多岗位"点击：加载下一批
+  document.getElementById('dirList').addEventListener('click', e=>{
+    const more=e.target.closest('.more-jobs-btn');
+    if(more){
+      const card=more.closest('.dir-card');
+      const dirName=decodeURIComponent(more.dataset.dir||'');
+      renderRealJobs(dirName, card, parseInt(more.dataset.page||'0',10)||0);
+      return;
+    }
+    // "设为目标岗位"：把岗位信息拼成 JD 文本推送到 STEP3
+    const setBtn=e.target.closest('.rjset');
+    if(setBtn){
+      let job={};
+      try{ job=JSON.parse(decodeURIComponent(setBtn.dataset.job||'{}')); }catch(_){}
+      const jdLines=[
+        '【目标岗位】'+(job.title||'（未识别）'),
+        '【公司】'+(job.company||'—'),
+        '【地点 / 薪资】'+[job.city,job.salary].filter(Boolean).join(' · ')||'—',
+        '【来源】'+(job.source||'—')
+      ];
+      if(job.link) jdLines.push('【岗位链接】'+job.link);
+      jdLines.push('', '💡 上方是该岗位的基本信息（来自猎聘/智联采集）。如需更精准的简历改写，请把该岗位的完整 JD 描述粘贴到下方，然后点击「一键 AI 改写」按目标岗位重写简历。');
+      const jdText=jdLines.join('\n');
+      const jdInput=document.getElementById('jdInput');
+      if(jdInput){
+        jdInput.value=jdText;
+        jdInput.dispatchEvent(new Event('input',{bubbles:true}));
+      }
+      const rn=document.getElementById('resumeNew');
+      if(rn && job.title) rn.dataset.target=job.title;
+      // 按钮反馈
+      setBtn.classList.add('done');
+      setBtn.textContent='✓ 已设为目标岗位';
+      // 自动跳到 STEP3 让用户立即看到
+      if(typeof goStep==='function') goStep(2);
+      return;
+    }
+  });
+
+  function dirsToHTML(inDirs, crossDirs){
+    const jobsHTML=(dir)=>`<div class="jobs open">
+        <div class="kw-hint">✅ <b style="color:var(--green)">真实在招岗位</b>（猎聘/智联采集 · 每批 5 条，可点更多加载）：</div>
+        <div class="realjobs"><div class="realjobs-empty">⏳ 正在加载真实在招岗位…</div></div>
+        <div class="kw-hint" style="margin-top:14px">💡 或用关键词直达招聘平台搜索更多：</div>
+        <div class="kw-chips">${dirKws(dir).map(kw=>`<a class="kw-chip" href="${bossUrl(kw, cityCode)}" target="_blank" rel="noopener noreferrer">${escapeHtml(kw)}<span class="kw-arrow">↗</span></a>`).join('')}</div>
+        <a class="boss-link" href="${bossUrl(dir.name, cityCode)}" target="_blank" rel="noopener noreferrer">🔍 去 BOSS直聘 搜「${escapeHtml(dir.name)}」相关岗位 <span class="bx">↗</span></a>
+      </div>`;
+    const card=(dir,label)=>`
+      <div class="dir-card" style="border-left-color:${dir.color}">
+        <span class="match">匹配度 ${Math.round(dir.match)}%</span>
+        <div class="name">${label} ${escapeHtml(dir.name)}</div>
+        <div class="why">${escapeHtml(dir.why||'')}</div>
+        ${(dir.badges||[]).map(b=>`<span class="badge">${escapeHtml(b)}</span>`).join('')}
+        ${jobsHTML(dir)}
+      </div>`;
+    return `
+      <div class="dir-sec">本行业延续方向<span>低风险过渡</span></div>
+      ${inDirs.map((d,i)=>card(d,`${i+1}. `)).join('')}
+      <div class="dir-sec">跨行业热点方向<span>新赛道 · 值得关注</span></div>
+      ${crossDirs.map((d,i)=>card(d,'🔥 ')).join('')}
+    `;
+  }
+  function renderDiagnosis(text){
+    const res=analyze(text);
+    dims=res.dims;
+    drawRadar();
+    document.getElementById('dirList').innerHTML=dirsToHTML(res.inDirs,res.crossDirs);
+    fillRealJobs();
+  }
+
+  // ===== 调用 DeepSeek（经 SCF 代理，密钥永不进前端）=====
+  const PROXY_BASE_URL='https://1463054997-09irgxzglb.ap-guangzhou.tencentscf.com';
+  const DS_MODEL='deepseek-chat';
+  const DS_API='https://api.deepseek.com/v1/chat/completions';
+
+  function getVisitorId(){
+    let v=localStorage.getItem('tc_visitor_id');
+    if(!v){
+      v='v_'+Math.random().toString(36).slice(2)+'_'+Date.now().toString(36);
+      localStorage.setItem('tc_visitor_id', v);
+    }
+    return v;
+  }
+
+  async function callDeepSeekDirect(system, user, expectJson, key){
+    const body={ model:DS_MODEL, messages:[{role:'system',content:system},{role:'user',content:user}], stream:false };
+    if(expectJson) body.response_format={ type:'json_object' };
+    const ctrl=new AbortController();
+    const to=setTimeout(()=>ctrl.abort(),30000);
+    try{
+      const res=await fetch(DS_API,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+        body:JSON.stringify(body),
+        signal:ctrl.signal
+      });
+      clearTimeout(to);
+      let j=null; try{ j=await res.json(); }catch(_){}
+      if(!res.ok){
+        const detail=(j&&j.error&&j.error.message)?j.error.message:(j&&(j.error||j.detail))?((j.error||'')+' '+(j.detail||'')):('HTTP '+res.status);
+        throw new Error('DeepSeek 返回错误：'+detail.trim());
+      }
+      const content=(j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||'';
+      if(!content) throw new Error('DeepSeek 返回结构异常');
+      return content;
+    }catch(e){
+      clearTimeout(to);
+      const m=e.message||'';
+      if(e.name==='AbortError' || /aborted|timeout|timed out/i.test(m)) throw new Error('请求超时（30 秒未响应）');
+      throw new Error('DeepSeek 网络调用失败（可能被网络/防火墙拦截）：'+m);
+    }
+  }
+
+  async function callDeepSeek(system, user, expectJson){
+    const userKey=localStorage.getItem(KEY_NAME);
+    if(userKey){
+      // 用户已填自己的 Key：直连 DeepSeek，不走代理，不消耗共享额度
+      return callDeepSeekDirect(system, user, expectJson, userKey);
+    }
+    // 未填 Key：走代理，服务端代持密钥并做 9 次免费额度限制
+    const body={ system, user, expectJson, visitorId:getVisitorId() };
+    const ctrl=new AbortController();
+    const to=setTimeout(()=>ctrl.abort(),35000);
+    try{
+      const res=await fetch(PROXY_BASE_URL+'/deepseek',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(body),
+        signal:ctrl.signal
+      });
+      clearTimeout(to);
+      if(res.status===429){
+        const t=await res.text().catch(()=>'');
+        throw new Error('免费次数已用完，请在右上角「DeepSeek Key」填入自己的 API Key 继续使用'+(t?('：'+t):''));
+      }
+      if(!res.ok){
+        const t=await res.text().catch(()=>'');
+        throw new Error('代理返回错误 HTTP '+res.status+(t?('：'+t):''));
+      }
+      const j=await res.json();
+      const content=(j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||'';
+      if(!content) throw new Error('DeepSeek 返回结构异常');
+      return content;
+    }catch(e){
+      clearTimeout(to);
+      if(e.name==='AbortError' || /aborted|timeout|timed out/i.test(e.message)) throw new Error('请求超时（35 秒未响应）');
+      throw e;
+    }
+  }
+  function parseJSONSafe(t){
+    if(!t||typeof t!=='string') return null;
+    try{ return JSON.parse(t); }catch(_){}
+    // AI 偶尔在 JSON 前后加解释文字：用平衡花括号提取第一个完整 JSON 对象
+    const start=t.indexOf('{');
+    if(start<0) return null;
+    let depth=0,inStr=false,esc=false;
+    for(let i=start;i<t.length;i++){
+      const c=t[i];
+      if(esc){ esc=false; continue; }
+      if(c==='\\'){ esc=true; continue; }
+      if(c==='"'){ inStr=!inStr; continue; }
+      if(inStr) continue;
+      if(c==='{') depth++;
+      else if(c==='}'){
+        depth--;
+        if(depth===0){
+          const sub=t.substring(start,i+1);
+          try{ return JSON.parse(sub); }catch(_){ return null; }
+        }
+      }
+    }
+    return null;
+  }
+  async function diagnoseWithAI(text){
+    const system=`你是资深职业转型顾问。根据建筑行业从业者的自我描述，只输出 JSON：
+{"dims":[{"k":"项目管理","v":80},{"k":"沟通协调","v":80},{"k":"供应链/采购","v":80},{"k":"风险控制","v":80},{"k":"商务报价","v":80},{"k":"现场执行","v":80}],"inDirs":[{"name":"本行业延续方向","match":90,"why":"一句话理由","badges":["标签1","标签2"],"kws":["BOSS直聘可搜索的岗位关键词1","关键词2","关键词3"]}],"crossDirs":[{"name":"跨行业新赛道方向","match":80,"why":"一句话理由","badges":["标签1","标签2"],"kws":["关键词1","关键词2","关键词3"]}]}
+要求：dims 共 6 项（名称固定如上），v 为 0-100 整数代表"工程能力→目标岗位"迁移度；inDirs 共 2 项为本行业延续方向；crossDirs 共 3-4 项，必须包含 AI Agent / 具身智能 / 低空经济 / 储能出海 等跨行业热点新赛道；match 为 0-100 整数。每个方向必须带 kws：3-5 个 BOSS直聘 可直接搜索的岗位关键词，必须基于用户简历特征生成更关联的岗位（如简历提到招投标/供应链/甲方对接，就给出"工程招投标经理""供应链采购经理""甲方项目PMO"这类贴合其经历的岗位词，不要给与简历无关的通用词），用于直达 BOSS直聘 搜索。不要任何解释文字。`;
+    const raw=await callDeepSeek(system,text,true);
+    const data=parseJSONSafe(raw);
+    if(!data||!Array.isArray(data.dims)) throw new Error('AI 返回无法解析');
+    return data;
+  }
+  function renderByData(data){
+    dims=data.dims.map(d=>({k:String(d.k),v:Math.max(0,Math.min(100,Number(d.v)||70))}));
+    drawRadar();
+    const list=document.getElementById('dirList');
+    const inArr=Array.isArray(data.inDirs)?data.inDirs:(Array.isArray(data.dirs)?data.dirs:[]);
+    const crossArr=Array.isArray(data.crossDirs)?data.crossDirs:[];
+    list.innerHTML=`<div class="ai-tag">⚡ 由 DeepSeek 实时生成（非本地模拟）</div>`+dirsToHTML(inArr,crossArr);
+    fillRealJobs();
+  }
+  function highlight(text){
+    return escapeHtml(text).replace(/\*\*(.+?)\*\*/g,'<span class="hl">$1</span>');
+  }
+  // 把文本中的 http/https URL 自动转为可点击外链，并对中文做 URL 编码，避免 href 里出现裸汉字导致某些浏览器打不开
+  function linkifyUrls(html){
+    return html.replace(/(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/g,(m,url)=>{
+      let href=url;
+      try{ href=encodeURI(decodeURI(url)); }catch(e){}
+      return `<a class="res-link" target="_blank" rel="noopener" href="${href}">${url}</a>`;
+    });
+  }
+
+  // 从 JD 文本中提取真实岗位名（优先"招聘/岗位：X工程师"等显式写法）
+  function extractTargetRole(jd){
+    const j=(jd||'').trim();
+    if(!j) return '';
+    let m=j.match(/(?:招聘|诚聘|招募|招|岗位|职位|职务|拟聘)[：:\s]*([^\n，,。；;]{2,20}?(?:工程师|经理|主管|专员|总监|负责人|BD|PM|运营|顾问|分析师|专家|架构师|规划师|设计师))/i);
+    if(m) return m[1].trim();
+    const first=j.split(/\n+/)[0].trim();
+    if(/(工程师|经理|主管|专员|总监|负责人|BD|PM|运营|顾问|分析师|专家|架构师|规划师|设计师)$/.test(first)) return first;
+    m=j.match(/([^\n，,。；;（(]{2,16}?(?:工程师|经理|主管|专员|总监|规划师|分析师))/);
+    if(m) return m[1].trim();
+    return '';
+  }
+  // 解析用户原简历：板块 → 公司/项目（子标题）→ 条目；基本信息/教育经历等原样保留
+  const PRESERVED_HEAD=/(基本信息|个人简介|自我评价|个人评价|教育背景|教育经历|学历|荣誉|证书|获奖|培训经历|语言能力|社团|实习经历)/;
+  function parseResume(text){
+    const lines=String(text||'').split(/\n+/).map(s=>s.trim()).filter(Boolean);
+    const HEAD=/(个人简介|自我评价|个人评价|基本信息|个人资料|工作经历|工作经验|工作业绩|项目经历|项目经验|主要项目|项目业绩|教育背景|教育经历|学历|专业技能|技能专长|技能|相关技能|荣誉|证书|获奖|培训经历|语言能力|社团|实习经历)/;
+    const isSecHead=line=>HEAD.test(line)
+      || /^(?:[一二三四五六七八九十\d]+[、.．)\s]+)(?:个人|工作|项目|教育|技能|经历|经验|背景|评价|简介|荣誉|证书|培训|实习|语言)/.test(line);
+    const BULLET_LABEL=/(项目背景|核心要求|项目成果|项目职责|个人职责|主要职责|工作内容|主要工作|工作描述|项目描述|项目概况|个人成果|业绩成果|业绩|职责|成果)/;
+    const isBullet=line=>/^\s*[-–—•·*・]/.test(line)
+      || /^[\d]+[、.．)）]/.test(line)
+      || /^[（(][\d]+[)）]/.test(line)
+      || BULLET_LABEL.test(line)
+      || /^(负责|参与|主导|牵头|完成|搭建|推动|统筹|组织|管理|对接|协调|带领|实施|落地|设计|开发|维护|优化|提升|降低|提高|开拓|建立|制定|梳理|推进|交付|审核|编制|谈判)/.test(line);
+    const stripBullet=s=>s.replace(/^\s*[-–—•·*・]+/,'').replace(/^[\d]+[、.．)）]/,'').replace(/^[（(][\d]+[)）]/,'').trim();
+    const sections=[]; let cur=null; let entry=null; let preserve=false;
+    const newSec=t=>{cur={title:t,entries:[],preserve:PRESERVED_HEAD.test(t)};sections.push(cur);entry=null;preserve=cur.preserve;};
+    const newEntry=h=>{entry={head:h,items:[]};cur.entries.push(entry);};
+    for(const line of lines){
+      if(isSecHead(line)){ newSec(line.replace(/[：:]\s*$/,'')); continue; }
+      if(!cur) newSec('简历内容');
+      if(preserve){
+        if(!entry) newEntry('');
+        entry.items.push(line);   // 基本信息 / 教育经历等：每行原样保留
+      }else if(isBullet(line)){
+        const item=stripBullet(line); if(!item) continue;
+        if(!entry) newEntry('');
+        entry.items.push(item);
+      } else {
+        newEntry(line);           // 公司 / 项目名称等子标题，原样保留
+      }
+    }
+    let out=sections
+      .filter(s=>s.entries.some(e=>e.items.length))
+      .map(s=>({...s, entries:s.entries.filter(e=>e.items.length)}));
+    // 兜底：只要没有解析出「工作经历 / 项目经历」的实质条目，就把有效文本行打包成「工作经历」
+    const hasWorkOrProjItems=out.some(s=>/工作|项目|经验|经历/.test(s.title) && s.entries.some(e=>e.items.length));
+    if(!hasWorkOrProjItems){
+      const bodyLines=lines.filter(ln=>{
+        const s=String(ln).trim();
+        return s.length>=8 && !/^(姓名|电话|邮箱|城市|期望薪资|求职意向|自我评价)/.test(s);
+      });
+      if(bodyLines.length){
+        out.push({title:'工作经历', entries:[{head:'（基于原始简历提炼）', items:bodyLines.slice(0,12)}], preserve:false});
+      }
+    }
+    return out;
+  }
+  function serializeResume(sections){
+    return sections.map(s=>{
+      const note=s.preserve?'（本板块请原样保留，不要改写）':'';
+      return '【'+s.title+'】'+note+'\n'+s.entries.map(e=>(e.head?('◆ '+e.head+'\n'):'')+e.items.map(i=>'· '+i).join('\n')).join('\n');
+    }).join('\n\n');
+  }
+  // 把任意 AI/本地返回整理成统一简历模型（5 段式，字段缺失自动补齐）
+  function asArr(a){
+    if(!Array.isArray(a)) return [];
+    // 对象（work/projects/education 条目）保持原样；原始值（duties/achievements/evaluation）转字符串
+    return a.map(x => x==null?'': (typeof x==='object' ? x : String(x)));
+  }
+  function normalizeResume(d){
+    d=d||{};
+    return {
+      info:{ name:String(d.name||''), phone:String(d.phone||''), email:String(d.email||''), city:String(d.city||''), salary:String(d.salary||'') },
+      intent:{ job:String((d.intent&&d.intent.job)||d.target||''), city:String((d.intent&&d.intent.city)||'') },
+      education:asArr(d.education).map(e=>({period:String(e.period||''),school:String(e.school||''),major:String(e.major||''),extra:String(e.extra||'')})),
+      work:asArr(d.work).map(w=>({period:String(w.period||''),org:String(w.org||''),role:String(w.role||''),duties:asArr(w.duties),achievements:asArr(w.achievements)})),
+      projects:asArr(d.projects).map(p=>({period:String(p.period||''),name:String(p.name||''),role:String(p.role||''),duties:asArr(p.duties),desc:String(p.desc||''),achievements:asArr(p.achievements)})),
+      evaluation:asArr(d.evaluation)
+    };
+  }
+  // AI 改写：直接输出「严格 5 段式」的 canonical JSON
+  async function rewriteWithAI(originalResume, jd){
+    const jdNote=jd?`【目标岗位JD】\n${jd}\n`:'';
+    const base=`你是资深简历顾问，专门帮助建筑/土木/工程行业从业者转型求职。用户提供了【原始简历】与【目标岗位JD】。\n请基于原始简历的**真实经历**，输出一个严格遵循下方 JSON 结构的优化简历，用于直接向 HR 投递。\n要求：\n1）只保留这 5 个板块：求职意向、教育经历、工作经历、项目经历、自我评价；不要新增其他板块，不要输出任何解释文字。\n2）intent.job = 从 JD 提取的岗位名；intent.city = 从原始简历/意向信息提取的意向城市（没有则留空字符串 ""）。\n3）教育经历：原样保留用户的真实学历（学校、专业、学位、时间、GPA 等），整理成 period/school/major/extra 字段（没有则留空）。\n4）工作经历：从原始简历提取真实公司/时间/职位，将职责用 STAR 法改写成契合目标岗位 JD 的语言，分成"工作职责"与"工作业绩"两类，各 2-4 条；不得编造不存在的经历。\n5）项目经历：从原始简历提取真实项目，分成"项目职责""项目描述""项目业绩"三类（无描述则 desc 留空 ""）。\n6）自我评价：3 条，结合建筑背景与目标岗位，突出可迁移能力，避免空话。\n7）duties / achievements 数组元素为**纯文本句子**，不要带 "1." 前缀（程序会自动编号）；**必须**用 **加粗** 把每条中最能与目标岗位 JD 匹配/可迁移的关键词括起来（如「**跨部门协调**」「**数据驱动**」「**商业化**」「**B端客户**」等），每条至少 1 个 **加粗** 关键词、建议 2-3 个，方便用户一眼看到与目标岗位的针对性；可用 **加粗** 标其它重点。\n8）name/phone/email/city/salary：尽量从原始简历提取真实信息，没有则对应字段留空字符串 ""。\n只输出 JSON，结构示例（必须用用户真实信息替换，禁止输出示例文本）：\n{"name":"","phone":"","email":"","city":"","salary":"","intent":{"job":"岗位名","city":""},"education":[{"period":"2014.9-2018.6","school":"xx大学","major":"城市规划专业 | 学士","extra":"GPA: 3.8/4.0"}],"work":[{"period":"2018.7-至今","org":"xx公司","role":"组长","duties":["职责1"],"achievements":["业绩1"]}],"projects":[{"period":"","name":"xx项目","role":"","duties":["职责1"],"desc":"","achievements":["业绩1"]}],"evaluation":["评价1","评价2","评价3"]}`;
+    const user=`【原始简历】\n${originalResume}\n\n${jdNote}`;
+    // 第 2 次尝试用更强指令，规避 AI 偶发返回空 work/projects
+    const attempts=[base, base+'\n\n【强制要求】只要原始简历中出现工作经历或项目经历，work 和 projects 数组就必须各输出至少 1 项（含真实 org/name、duties、achievements），严禁输出空数组 []。'];
+    let lastErr=null;
+    for(let i=0;i<attempts.length;i++){
+      try{
+        const raw=await callDeepSeek(attempts[i],user,true);
+        const data=parseJSONSafe(raw);
+        if(!data||typeof data!=='object'){ const e=new Error('AI 返回无法解析'); e.aiRaw=raw; throw e; }
+        const norm=normalizeResume(data);
+        // AI 返回成功但工作/项目为空或内容残缺（无 org/name/职责/业绩，渲染时会被过滤掉）→ 重试或回退本地模板保留原始经历
+        const hasWork=norm.work.some(w=>w&&(w.org||(w.duties&&w.duties.length)||(w.achievements&&w.achievements.length)));
+        const hasProj=norm.projects.some(p=>p&&(p.name||(p.duties&&p.duties.length)||(p.achievements&&p.achievements.length)));
+        if(hasWork||hasProj) return norm;
+        const e=new Error('AI 返回的工作/项目为空'); e.aiRaw=raw; lastErr=e;
+      }catch(err){ lastErr=err; }
+    }
+    throw lastErr||new Error('AI 改写失败');
+  }
+  // 本地模板：无 Key / CORS 失败时回退，同样输出 5 段式结构
+  // 把任意工作描述改写成 STAR 单条：尽量保留原句，不编造量化数据
+  function toSTAR(line, role){
+    const s=String(line).trim();
+    // 情境/任务
+    const ctxMatch=s.match(/(?:在|针对|围绕|为|基于)([^，。；;]+?)(?:中|里|内|需求|目标|项目|工程|场景|客户)/);
+    let ctx='';
+    if(ctxMatch) ctx='S/T：'+ctxMatch[0]+'。';
+    else ctx='S/T：在目标岗位对应的项目场景中，承担 '+role.name+' 相关任务。';
+    // 行动：去掉已用作情境的部分，避免重复
+    let action=s;
+    if(ctxMatch) action=s.replace(ctxMatch[0],'').replace(/^[，,、]/,'').trim();
+    if(!action) action=s;
+    // 结果：原文含数字/成果词时直接提取，否则提示补充
+    const resMatch=s.match(/(?:(?:成本|费用|预算|工期|时间|周期|效率|质量|安全事故|缺陷率|投诉率|满意度|产值|收入|回款|签约|中标|通过|验收|交付|投产).*?)?(?:降低|减少|缩短|提升|提高|增长|增加|节省|节约|覆盖|完成|实现|达成|获得|通过|验收|交付|投产)[^，。；;]*(?:\d+(?:\.\d+)?%?|\d+天|\d+个月|\d+万[^，。；;]*|[一二三四五六七八九十百千万]+[^，。；;]*)/);
+    let result='';
+    if(resMatch) result='R：'+resMatch[0]+'。';
+    else result='R：取得预期业务成果（建议补充具体量化数据，如成本降低 X%、工期缩短 Y 天）。';
+    return (ctx+' A：'+action+' '+result).replace(/\s+/g,' ');
+  }
+  function rewriteOnePlain(line, role){
+    let after=String(line);
+    BASE.forEach(t=>{ after=after.replace(t.re, t.v[role.key]||t.v.any); });
+    if(after===String(line)){ after=line+'（可迁移：复杂项目的统筹与交付能力，契合「'+role.name+'」）'; }
+    return toSTAR(after, role);
+  }
+  function sectionsToResume(sections, role){
+    const eduSec=sections.find(s=>/教育|学历/.test(s.title));
+    const workSecs=sections.filter(s=>/工作|经验/.test(s.title));
+    const projSecs=sections.filter(s=>/项目/.test(s.title));
+    const skillSec=sections.find(s=>/技能|专业/.test(s.title));
+    const edu=(eduSec?eduSec.entries:[]).map(e=>{
+      const items=e.items.slice();
+      let period='', school=(e.head||''), major='', extra='';
+      const di=items.findIndex(it=>/\d{4}/.test(it));
+      if(di>=0){ period=items[di]; const rest=items.filter((_,i)=>i!==di); major=rest[0]||''; extra=rest.slice(1).join('；'); }
+      else { major=items[0]||''; extra=items.slice(1).join('；'); }
+      return {period,school,major,extra};
+    });
+    const work=workSecs.flatMap(s=>s.entries.map(e=>({
+      period:'', org:(e.head||''), role:'',
+      duties:e.items.map(b=>rewriteOnePlain(b,role)), achievements:[]
+    })));
+    const projects=projSecs.flatMap(s=>s.entries.map(e=>({
+      period:'', name:(e.head||''), role:'',
+      duties:e.items.map(b=>rewriteOnePlain(b,role)), desc:'', achievements:[]
+    })));
+    // 兜底：完全没有工作/项目板块时，把非教育/技能/自我评价的文本抽成一段经历，避免点击后空白
+    if(!work.length && !projects.length){
+      const fallbackItems=[];
+      for(const s of sections){
+        if(/教育|学历|技能|专业|自我评价|个人简介|荣誉|证书|培训|语言|实习/.test(s.title)) continue;
+        for(const e of s.entries){
+          for(const it of e.items){
+            const clean=String(it).trim();
+            if(clean.length>8 && fallbackItems.length<8) fallbackItems.push(clean);
+          }
+        }
+      }
+      if(fallbackItems.length){
+        work.push({period:'', org:'（基于原始简历提炼）', role:'', duties:fallbackItems.map(b=>rewriteOnePlain(b,role)), achievements:[]});
+      }
+    }
+    const skills=(skillSec?skillSec.entries.flatMap(x=>x.items):[]).slice(0,4);
+    const evaluation=[
+      '具备建筑/工程行业项目统筹与跨职能交付经验，擅长将复杂现场问题转化为结构化方案，可平滑迁移至「'+(role.name)+'」岗位。',
+      '拥有'+(skills.length?('扎实的'+skills.join('、')+'能力'):'扎实的专业执行力')+'，与目标岗位核心职责高度契合。',
+      '具备良好的团队协作、独立解决问题与在压力下稳定交付的能力。'
+    ];
+    return normalizeResume({ info:{name:'【你的姓名】'}, intent:{job:role.name, city:''}, education:edu, work, projects, evaluation });
+  }
+  function localResume(role, sections){ return sectionsToResume(sections||[], role); }
+  // 最近一次生成的简历数据（供复制带格式 / 导出 Word 复用）
+  let lastResume=null;
+  // 简历渲染：严格参照「个人简历模板.docx」的 5 段式（求职意向/教育经历/工作经历/项目经历/自我评价）
+  function rt(s){return escapeHtml(s==null?'':s);}
+  function rHl(t){ return escapeHtml(t==null?'':t).replace(/\*\*(.+?)\*\*/g,'<span class="hl">$1</span>'); }
+  // 简历正文（.rp-* 结构），屏幕渲染与导出 / 复制共用
+  function resumeInner(d){
+    d=d||{};
+    const info=d.info||{}, intent=d.intent||{};
+    const name=info.name||'【你的姓名】';
+    const ci=[info.phone&&('电话：'+info.phone), info.email&&('邮箱：'+info.email), info.city&&('城市：'+info.city), info.salary&&('期望薪资：'+info.salary)].filter(Boolean).join('　|　');
+    let h='';
+    h+=`<div class="rp-name">${rt(name)}</div>`;
+    h+= ci? `<div class="rp-contact">${rt(ci)}</div>` : `<div class="rp-contact">&nbsp;</div>`;
+    // 求职意向
+    h+=`<div class="rp-sec"><div class="rp-sec-h">求职意向</div><div class="rp-intent">意向岗位：<b>${rt(intent.job||'（请填写）')}</b>${intent.city?('　意向城市：'+rt(intent.city)):''}</div></div>`;
+    // 教育经历
+    const edu=(d.education||[]).filter(e=>e&&(e.school||e.major||e.period));
+    if(edu.length){
+      h+=`<div class="rp-sec"><div class="rp-sec-h">教育经历</div>`;
+      edu.forEach(e=>{
+        h+=`<div class="rp-sub"><span class="rp-period">${rt(e.period)}</span><span class="rp-org">${rt(e.school)}</span></div>`;
+        if(e.major) h+=`<div class="rp-line">${rt(e.major)}</div>`;
+        if(e.extra) h+=`<div class="rp-line">${rt(e.extra)}</div>`;
+      });
+      h+=`</div>`;
+    }
+    // 工作经历
+    const work=(d.work||[]).filter(w=>w&&(w.org||(w.duties&&w.duties.length)));
+    if(work.length){
+      h+=`<div class="rp-sec"><div class="rp-sec-h">工作经历</div>`;
+      work.forEach(w=>{
+        h+=`<div class="rp-sub"><span class="rp-period">${rt(w.period)}</span><span class="rp-org">${rt(w.org)}</span></div>`;
+        if(w.role) h+=`<div class="rp-role">${rt(w.role)}</div>`;
+        if((w.duties||[]).length){ h+=`<div class="rp-label">工作职责：</div><ol class="rp-list">${w.duties.map(x=>`<li>${rHl(x)}</li>`).join('')}</ol>`; }
+        if((w.achievements||[]).length){ h+=`<div class="rp-label">工作业绩：</div><ol class="rp-list">${w.achievements.map(x=>`<li>${rHl(x)}</li>`).join('')}</ol>`; }
+      });
+      h+=`</div>`;
+    }
+    // 项目经历
+    const proj=(d.projects||[]).filter(p=>p&&(p.name||(p.duties&&p.duties.length)));
+    if(proj.length){
+      h+=`<div class="rp-sec"><div class="rp-sec-h">项目经历</div>`;
+      proj.forEach(p=>{
+        h+=`<div class="rp-sub"><span class="rp-period">${rt(p.period)}</span><span class="rp-org">${rt(p.name)}</span></div>`;
+        if(p.role) h+=`<div class="rp-role">${rt(p.role)}</div>`;
+        if((p.duties||[]).length){ h+=`<div class="rp-label">项目职责：</div><ol class="rp-list">${p.duties.map(x=>`<li>${rHl(x)}</li>`).join('')}</ol>`; }
+        if(p.desc) h+=`<div class="rp-label">项目描述：</div><div class="rp-desc">${rHl(p.desc)}</div>`;
+        if((p.achievements||[]).length){ h+=`<div class="rp-label">项目业绩：</div><ol class="rp-list">${p.achievements.map(x=>`<li>${rHl(x)}</li>`).join('')}</ol>`; }
+      });
+      h+=`</div>`;
+    }
+    // 自我评价
+    const ev=(d.evaluation||[]).filter(Boolean);
+    if(ev.length){
+      h+=`<div class="rp-sec"><div class="rp-sec-h">自我评价</div><ol class="rp-list">${ev.map(x=>`<li>${rHl(x)}</li>`).join('')}</ol></div>`;
+    }
+    return h;
+  }
+  function renderResume(data){
+    lastResume=data;
+    return `<div class="resume-paper">${resumeInner(data)}</div>`;
+  }
+  // 改写预览（屏幕展示）：只展示 AI 改写后的工作 / 项目经历（STAR 逐条 + 高亮），
+  // 不放用户原始上传简历的框架信息；完整可投递简历仍由 resumePlain / resumeDocHTML 提供
+  function renderRewritePreview(data){
+    data=data||{};
+    const target=(data.intent&&data.intent.job)||'';
+    let h='';
+    if(target) h+=`<div class="r-target">🎯 改写目标岗位：<b>${rt(target)}</b></div>`;
+    let any=false;
+    const work=(data.work||[]).filter(w=>w&&(w.org||(w.duties&&w.duties.length)||(w.achievements&&w.achievements.length)));
+    if(work.length){
+      any=true;
+      h+=`<div class="r-sec"><div class="r-sec-h">工作经历（按目标岗位 JD · STAR 改写）</div>`;
+      work.forEach(w=>{
+        h+=`<div class="r-entry"><div class="r-entry-h">${rt(w.period||'')}${w.org?('　'+rt(w.org)):''}${w.role?(' · '+rt(w.role)):''}</div>`;
+        if((w.duties||[]).length){ h+=`<div class="r-label">工作职责</div><ol class="r-list">${w.duties.map(x=>`<li>${rHl(x)}</li>`).join('')}</ol>`; }
+        if((w.achievements||[]).length){ h+=`<div class="r-label">工作业绩</div><ol class="r-list">${w.achievements.map(x=>`<li>${rHl(x)}</li>`).join('')}</ol>`; }
+        h+=`</div>`;
+      });
+      h+=`</div>`;
+    }
+    const proj=(data.projects||[]).filter(p=>p&&(p.name||(p.duties&&p.duties.length)||(p.achievements&&p.achievements.length)));
+    if(proj.length){
+      any=true;
+      h+=`<div class="r-sec"><div class="r-sec-h">项目经历（按目标岗位 JD · STAR 改写）</div>`;
+      proj.forEach(p=>{
+        h+=`<div class="r-entry"><div class="r-entry-h">${rt(p.period||'')}${p.name?('　'+rt(p.name)):''}${p.role?(' · '+rt(p.role)):''}</div>`;
+        if((p.duties||[]).length){ h+=`<div class="r-label">项目职责</div><ol class="r-list">${p.duties.map(x=>`<li>${rHl(x)}</li>`).join('')}</ol>`; }
+        if(p.desc){ h+=`<div class="r-label">项目描述</div><div class="r-desc">${rHl(p.desc)}</div>`; }
+        if((p.achievements||[]).length){ h+=`<div class="r-label">项目业绩</div><ol class="r-list">${p.achievements.map(x=>`<li>${rHl(x)}</li>`).join('')}</ol>`; }
+        h+=`</div>`;
+      });
+      h+=`</div>`;
+    }
+    if(!any) h+=`<div style="color:var(--sub);font-size:14px">未解析到工作 / 项目经历，请检查 STEP1 简历格式（建议含「公司/项目 → 1·2·3·4 职责」）。</div>`;
+    return h;
+  }
+  // 复制 / 导出 Word 使用的浅色 HTML（自带 .rp 样式，粘进 Word 保持版式）
+  function resumeDocHTML(data){
+    return `<div class="rp">${resumeInner(data)}</div>`;
+  }
+
+  // 步骤切换
+  const panels=document.querySelectorAll('.panel');
+  const stepEls=document.querySelectorAll('.step');
+  function goStep(n){
+    panels.forEach(p=>p.classList.toggle('show',+p.dataset.panel===n));
+    stepEls.forEach(s=>s.classList.toggle('active',+s.dataset.step===n));
+    window.scrollTo({top:0,behavior:'smooth'});
+    // 进入 STEP4 不再自动加载，改为点击「开始定制」按钮触发（带进度条）
+    if(n===3 && pathOut.dataset.done!=='1'){
+      // 首次进入：显示开始按钮（已生成过则保持内容）
+      showPathStart();
+    }
+  }
+  stepEls.forEach(s=>s.addEventListener('click',()=>goStep(+s.dataset.step)));
+  document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>goStep(+b.dataset.next+1)));
+  document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>goStep(+b.dataset.back-1)));
+
+  // API Key 管理
+  const KEY_NAME='tc_deepseek_key';
+  // 不再预置任何默认 Key：访客可免费试用 9 次（由代理服务端计数），用完后需填写自己的 Key
+  const DEFAULT_DS_KEY='';
+  function getDSKey(){ return localStorage.getItem(KEY_NAME)||DEFAULT_DS_KEY; }
+  function usingDefaultDS(){ return false; }
+  const keyBtn=document.getElementById('keyBtn');
+  const keyModal=document.getElementById('keyModal');
+  const keyInput=document.getElementById('keyInput');
+  const keyDot=document.getElementById('keyDot');
+  const keyLabel=document.getElementById('keyLabel');
+  const keyTrialEl=document.getElementById('keyTrial');
+
+  // 试用次数管理：仅用于前端 UI 提示，真实限制由代理服务端强制执行
+  const TRIAL_LIMIT={deepseek:9, bazhuayu:3};
+  const TRIAL_KEYS={deepseek:'tc_deepseek_trial_used', bazhuayu:'tc_bazhuayu_trial_used'};
+  const COUNT_CACHE={};
+  function getLocalTrialUsed(type){ return parseInt(localStorage.getItem(TRIAL_KEYS[type])||'0',10)||0; }
+  function setLocalTrialUsed(type,n){ localStorage.setItem(TRIAL_KEYS[type], String(Math.max(0,n))); }
+  function limitOf(type){ return TRIAL_LIMIT[type]; }
+  function isUnlimited(type){ return !isFinite(TRIAL_LIMIT[type]); }
+  async function getCountUsed(type){
+    const v=getLocalTrialUsed(type);
+    COUNT_CACHE[type]=v; return v;
+  }
+  async function hitCount(type){
+    const n=getLocalTrialUsed(type)+1;
+    setLocalTrialUsed(type,n);
+    COUNT_CACHE[type]=n; return n;
+  }
+  async function getServerQuota(type){
+    const body={ type, visitorId:getVisitorId() };
+    const ctrl=new AbortController();
+    const to=setTimeout(()=>ctrl.abort(),10000);
+    try{
+      const res=await fetch(PROXY_BASE_URL+'/quota',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(body),
+        signal:ctrl.signal
+      });
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      return await res.json();
+    }finally{ clearTimeout(to); }
+  }
+  function hasOwnConfig(type){
+    return type==='deepseek'
+      ? !!localStorage.getItem(KEY_NAME)
+      : !!(localStorage.getItem(BZ_KEY_NAME)||localStorage.getItem(BZ_TOKEN_NAME));
+  }
+  async function trialHTML(type, name){
+    if(hasOwnConfig(type)){
+      return `<div class="ok"><b>${name}</b>：已使用自己的配置，<b style="color:var(--green)">不限次数</b>，不消耗共享试用额度。</div>`;
+    }
+    try{
+      const q=await getServerQuota(type);
+      if(q.available===false){
+        return `<div class="warn"><b>${name}</b>：服务端暂未启用该功能（缺少配置），请先填写自己的配置或联系宝哥。</div>`;
+      }
+      const used=q.used||0, limit=q.limit||0, remain=Math.max(0,limit-used);
+      const cls= remain<=0?'danger':(remain===1?'warn':'');
+      const pct=limit?Math.round(remain/limit*100):0;
+      const action=remain<=0?'免费试用次数已用完，可填入自己的 API Key 继续使用（不消耗试用额度）':`当前还可免费试用 ${remain}/${limit} 次`;
+      return `<div class="${cls}"><b>${name}</b>：${action}<div class="bar"><i style="width:${pct}%"></i></div>已用 ${used}/${limit} 次 · 剩余 ${remain} 次 · 填自己的 Key 不限 · 额度按访客在服务端计数</div>`;
+    }catch(e){
+      return `<div class="warn"><b>${name}</b>：额度查询暂不可用（请稍后重试），实际调用仍受服务端次数限制。</div>`;
+    }
+  }
+  function alertTrialExhausted(name){
+    const limit=limitOf('deepseek');
+    alert(`${name} API 当前浏览器试用次数已用完（${limit}/${limit}）。\n\n你可在右上角「DeepSeek Key」里填入自己的 API Key，即可继续使用；或换一个浏览器/设备会重新获得 ${limit} 次试用额度。`);
+  }
+  // 异步刷新两个按钮的「已用完」状态
+  async function refreshTrialLabels(){
+    try{
+      const d=await getCountUsed('deepseek');
+      if(getDSKey()){
+        keyDot.classList.add('ok');
+        const isDefault=usingDefaultDS();
+        keyLabel.textContent=isDefault?('已预置·免费试用'+((limitOf('deepseek')-d)<=0?'（已用完）':'')):'Key 已设置（自己的 Key）';
+      }
+      else { keyDot.classList.remove('ok'); keyLabel.textContent='DeepSeek Key'; }
+      const c=bzConfig();
+      if(c.apikey||c.token){ bzDot.classList.add('ok'); bzLabel.textContent=(usingDefaultBz()?'已预置·不限次数':'八爪鱼已配'); }
+      else { bzDot.classList.remove('ok'); bzLabel.textContent='八爪鱼 API'; }
+    }catch(e){}
+  }
+
+  function updateKeyUI(){
+    const key=getDSKey();
+    const used=COUNT_CACHE['deepseek']!=null?COUNT_CACHE['deepseek']:getLocalTrialUsed('deepseek');
+    const exhausted=(limitOf('deepseek')-used)<=0;
+    if(key){
+      keyDot.classList.add('ok');
+      const isDefault=usingDefaultDS();
+      keyLabel.textContent=isDefault?('已预置·免费试用'+(exhausted?'（已用完）':'')):'Key 已设置（自己的 Key）';
+    }else{
+      keyDot.classList.remove('ok');
+      keyLabel.textContent='DeepSeek Key';
+    }
+  }
+  function openKey(){
+    keyInput.value=usingDefaultDS()?'':getDSKey();
+    const tip=DEFAULT_DS_KEY?'<div style="font-size:12px;color:var(--sub);margin-top:8px">当前为宝哥预置的演示 Key，每个浏览器独立免费试用 9 次；你也可在此替换成自己的 Key，自己的 Key 不限次数。</div>':'';
+    keyTrialEl.innerHTML='<div style="font-size:13px;color:var(--sub)">加载试用额度…</div>'+tip;
+    keyModal.classList.add('show');
+    trialHTML('deepseek','DeepSeek API').then(h=>{ if(keyModal.classList.contains('show')) keyTrialEl.innerHTML=h+tip; });
+  }
+  function closeKey(){keyModal.classList.remove('show');}
+
+  keyBtn.addEventListener('click',openKey);
+  document.getElementById('cancelKey').addEventListener('click',closeKey);
+  document.getElementById('saveKey').addEventListener('click',()=>{
+    const v=keyInput.value.trim();
+    if(v)localStorage.setItem(KEY_NAME,v);else localStorage.removeItem(KEY_NAME);
+    updateKeyUI();closeKey();
+  });
+  document.getElementById('clearKey').addEventListener('click',()=>{
+    localStorage.removeItem(KEY_NAME);keyInput.value='';updateKeyUI();
+  });
+  keyModal.addEventListener('click',e=>{if(e.target===keyModal)closeKey();});
+  updateKeyUI();
+
+  // ===== 八爪鱼云采集 API 配置 =====
+  const BZ_KEY_NAME='tc_bazhuayu_apikey';
+  const BZ_TOKEN_NAME='tc_bazhuayu_token';
+  const BZ_TASK_NAME='tc_bazhuayu_taskid';
+  const BZ_BASE='https://openapi.bazhuayu.com';
+  // 不再预置任何默认八爪鱼配置：若需真实岗位抓取，访客须填写自己的 apikey + taskId（由代理服务端代持并做 3 次免费额度限制）
+  const DEFAULT_BZ={apikey:'', token:'', taskId:''};
+  function usingDefaultBz(){ return (!localStorage.getItem(BZ_KEY_NAME) && !localStorage.getItem(BZ_TOKEN_NAME)) && !!(DEFAULT_BZ.apikey||DEFAULT_BZ.token); }
+  const bzBtn=document.getElementById('bzBtn');
+  const bzModal=document.getElementById('bzModal');
+  const bzApiKey=document.getElementById('bzApiKey');
+  const bzToken=document.getElementById('bzToken');
+  const bzTaskId=document.getElementById('bzTaskId');
+  const bzDot=document.getElementById('bzDot');
+  const bzLabel=document.getElementById('bzLabel');
+  const bzTrialEl=document.getElementById('bzTrial');
+  function bzConfig(){
+    return {
+      apikey: localStorage.getItem(BZ_KEY_NAME)||DEFAULT_BZ.apikey,
+      token: localStorage.getItem(BZ_TOKEN_NAME)||DEFAULT_BZ.token,
+      taskId: localStorage.getItem(BZ_TASK_NAME)||DEFAULT_BZ.taskId
+    };
+  }
+  function updateBzUI(){
+    const c=bzConfig();
+    if(c.apikey||c.token){ bzDot.classList.add('ok'); bzLabel.textContent=(usingDefaultBz()?'已预置·不限次数':'八爪鱼已配'); }
+    else { bzDot.classList.remove('ok'); bzLabel.textContent='八爪鱼 API'; }
+  }
+  function openBz(){
+    const c=bzConfig();
+    const def=usingDefaultBz();
+    bzApiKey.value=def?'':c.apikey; bzToken.value=def?'':c.token; bzTaskId.value=def?'':c.taskId;
+    const tip=(DEFAULT_BZ.apikey||DEFAULT_BZ.token)?'<div style="font-size:12px;color:var(--sub);margin-top:8px">当前为宝哥预置的演示配置，<b style="color:var(--green)">不限次数</b>；你也可在此替换成自己的配置。</div>':'';
+    bzTrialEl.innerHTML='<div style="font-size:13px;color:var(--sub)">加载试用额度…</div>'+tip;
+    bzModal.classList.add('show');
+    trialHTML('bazhuayu','八爪鱼云采集 API').then(h=>{ if(bzModal.classList.contains('show')) bzTrialEl.innerHTML=h+tip; });
+  }
+  function closeBz(){ bzModal.classList.remove('show'); }
+  bzBtn.addEventListener('click',openBz);
+  document.getElementById('bzCancel').addEventListener('click',closeBz);
+  bzModal.addEventListener('click',e=>{if(e.target===bzModal)closeBz();});
+  document.getElementById('bzSave').addEventListener('click',()=>{
+    const k=bzApiKey.value.trim(), t=bzToken.value.trim(), id=bzTaskId.value.trim();
+    if(k) localStorage.setItem(BZ_KEY_NAME,k); else localStorage.removeItem(BZ_KEY_NAME);
+    if(t) localStorage.setItem(BZ_TOKEN_NAME,t); else localStorage.removeItem(BZ_TOKEN_NAME);
+    if(id) localStorage.setItem(BZ_TASK_NAME,id); else localStorage.removeItem(BZ_TASK_NAME);
+    updateBzUI(); closeBz();
+  });
+  document.getElementById('bzClear').addEventListener('click',()=>{
+    localStorage.removeItem(BZ_KEY_NAME); localStorage.removeItem(BZ_TOKEN_NAME); localStorage.removeItem(BZ_TASK_NAME);
+    bzApiKey.value=''; bzToken.value=''; bzTaskId.value=''; updateBzUI();
+  });
+  updateBzUI();
+  refreshTrialLabels();
+  loadJobsData(); // 加载真实在招岗位数据（jobs_data.json）
+
+  // ===== 真实调用八爪鱼云采集 API =====
+  let bzCache=null;
+  function bzAuthHeaders(){
+    const c=bzConfig();
+    const h={'Content-Type':'application/json'};
+    if(c.apikey) h['x-api-key']=c.apikey;
+    else if(c.token){ const tk=c.token.startsWith('Bearer ')?c.token.slice(7):c.token; h['Authorization']='Bearer '+tk; }
+    return h;
+  }
+  function pickField(obj, keys){
+    for(const k of keys){
+      for(const ok of Object.keys(obj)){
+        const lk=ok.toLowerCase(), lk2=k.toLowerCase();
+        if(lk===lk2 || ok.includes(k) || k.includes(ok)){
+          const v=obj[ok];
+          if(v!==undefined && v!==null && String(v).trim()!=='') return String(v).trim();
+        }
+      }
+    }
+    return '';
+  }
+  function splitTags(v){
+    if(!v) return [];
+    return String(v).split(/[、,，/ \/|；;]/).map(s=>s.trim()).filter(Boolean).slice(0,6);
+  }
+  function mapBazhuayuRecord(obj){
+    const title=pickField(obj,['岗位','职位','job','title','名称','招聘岗位','position','招聘']);
+    const company=pickField(obj,['公司','企业','company','雇主','employer','hr']);
+    const salary=pickField(obj,['薪资','工资','薪酬','salary','待遇','薪水','工资范围']);
+    const city=pickField(obj,['城市','city','工作地','地点','工作地点','area','地区']);
+    const exp=pickField(obj,['经验','exp','工作年限','year','年限']);
+    const edu=pickField(obj,['学历','edu','教育','degree','学校']);
+    const scale=pickField(obj,['规模','人数','scale','公司规模','companysize','人数规模']);
+    const financing=pickField(obj,['融资','阶段','financing','round','轮次']);
+    const tagsRaw=pickField(obj,['标签','技能','tags','福利','福利标签','技能要求']);
+    const jd=pickField(obj,['描述','职责','要求','jd','岗位描述','招聘要求','detail','内容','岗位要求','responsibility']);
+    const link=pickField(obj,['链接','link','url','职位链接','岗位链接','详情链接','detail_url','job_url']);
+    return {
+      title: title||'（岗位名未识别）',
+      company: company||'（公司未识别）',
+      salary: salary||'面议',
+      city: city||'—', exp: exp||'—', edu: edu||'—',
+      scale: scale||'—', financing: financing||'—',
+      tags: tagsRaw?splitTags(tagsRaw):[],
+      jd: jd||'（岗位描述未识别，请检查八爪鱼采集字段命名）',
+      link: link||'',
+      source:'八爪鱼云采集（真实）'
+    };
+  }
+  async function fetchBazhuayuJobs(keyword){
+    // 已配置 taskId：走代理，由服务端代持凭证并做 3 次免费额度限制；未配置则抛错由调用方降级到示例数据
+    const c=bzConfig();
+    if(!c.taskId) throw new Error('未配置 taskId');
+    const body={ keyword, visitorId:getVisitorId() };
+    const ctrl=new AbortController();
+    const to=setTimeout(()=>ctrl.abort(),45000);
+    try{
+      const res=await fetch(PROXY_BASE_URL+'/bazhuayu',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(body),
+        signal:ctrl.signal
+      });
+      clearTimeout(to);
+      if(res.status===429){
+        const t=await res.text().catch(()=>'');
+        throw new Error('八爪鱼免费次数已用完'+(t?('：'+t):''));
+      }
+      if(!res.ok){
+        const t=await res.text().catch(()=>'');
+        throw new Error('八爪鱼代理返回错误 HTTP '+res.status+(t?('：'+t):''));
+      }
+      const list=await res.json();
+      if(!Array.isArray(list)) throw new Error('八爪鱼返回格式异常');
+      return list;
+    }catch(e){
+      clearTimeout(to);
+      if(e.name==='AbortError' || /aborted|timeout|timed out/i.test(e.message)) throw new Error('请求超时（45 秒未响应）');
+      throw e;
+    }
+  }
+
+  // 开始诊断：检查 Key + loading
+  const loading=document.getElementById('loading');
+  document.getElementById('toStep2').addEventListener('click',async ()=>{
+    const desc=document.getElementById('selfdesc').value.trim();
+    if(!desc){alert('请先填写背景描述，或上传简历。');return;}
+    cityCode=extractCity(desc); // 从自述/简历提取意向城市，用于岗位搜索链接
+    // 不再强制要求填 Key：未填 Key 时走代理免费额度；填了 Key 则直连自己的 Key
+    loading.classList.add('show');
+    const tip=loading.querySelector('p');
+    const oldTip=tip?tip.textContent:'';
+    if(tip) tip.textContent='DeepSeek 正在分析你的背景和可迁移能力…';
+    try{
+      const data=await diagnoseWithAI(desc);
+      renderByData(data);
+    }catch(e){
+      console.warn('AI 实时调用失败，已回退本地模拟：',e.message);
+      renderDiagnosis(desc);
+    }finally{
+      if(tip) tip.textContent=oldTip;
+      loading.classList.remove('show');
+      goStep(1);
+    }
+  });
+
+  // 文件上传：txt / docx / pdf 真实解析
+  const upBtn=document.getElementById('upBtn');
+  const fileIn=document.getElementById('fileIn');
+  const upName=document.getElementById('upName');
+  const selfdesc=document.getElementById('selfdesc');
+
+  function parseDocx(file){
+    return new Promise((resolve,reject)=>{
+      if(typeof mammoth==='undefined'){reject(new Error('解析库未加载（需联网）'));return;}
+      const r=new FileReader();
+      r.onload=()=>mammoth.extractRawText({arrayBuffer:r.result})
+        .then(res=>resolve(res.value)).catch(reject);
+      r.onerror=()=>reject(new Error('文件读取失败'));
+      r.readAsArrayBuffer(file);
+    });
+  }
+  async function parsePDF(file){
+    const lib=await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/+esm');
+    lib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.worker.min.mjs';
+    const buf=await file.arrayBuffer();
+    const pdf=await lib.getDocument({data:buf}).promise;
+    let text='';
+    for(let i=1;i<=pdf.numPages;i++){
+      const page=await pdf.getPage(i);
+      const c=await page.getTextContent();
+      text+=c.items.map(it=>it.str).join(' ')+'\n';
+    }
+    return text;
+  }
+
+  upBtn.addEventListener('click',()=>fileIn.click());
+  fileIn.addEventListener('change',async e=>{
+    const f=e.target.files[0];if(!f)return;
+    const ext=f.name.split('.').pop().toLowerCase();
+    upBtn.disabled=true;upName.textContent='⏳ 正在解析 '+f.name+' …';
+    try{
+      let text='';
+      if(ext==='txt'){
+        text=await new Promise((res,rej)=>{
+          const r=new FileReader();
+          r.onload=ev=>res(ev.target.result);
+          r.onerror=()=>rej(new Error('读取失败'));
+          r.readAsText(f,'utf-8');
+        });
+        upName.textContent='✓ 已读取：'+f.name+'（txt）';
+      }else if(ext==='docx'||ext==='doc'){
+        if(ext==='doc') throw new Error('旧版 .doc 暂不支持，请另存为 .docx');
+        text=await parseDocx(f);
+        upName.textContent='✓ 已解析：'+f.name+'（Word）';
+      }else if(ext==='pdf'){
+        text=await parsePDF(f);
+        upName.textContent='✓ 已解析：'+f.name+'（PDF，'+text.trim().split('\n').filter(Boolean).length+' 行）';
+      }else{
+        throw new Error('不支持的格式：.'+ext);
+      }
+      selfdesc.value=text.slice(0,4000);
+    }catch(err){
+      upName.textContent='✗ 解析失败：'+(err.message||err)+'（可手动复制文本粘贴）';
+    }finally{
+      upBtn.disabled=false;
+    }
+  });
+
+  // 快速标签：点击追加/移除到 textarea
+  document.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{
+      const t=chip.dataset.t;
+      const on=chip.classList.toggle('on');
+      let v=selfdesc.value;
+      if(on){
+        v=v+(v&&!/[，。；,;\n]$/.test(v.slice(-1))?'，':'')+t;
+      }else{
+        v=v.replace(new RegExp('[,，]?\\s*'+t+'(?=\\s*[,，]|$)','g'),'');
+      }
+      selfdesc.value=v;
+    });
+  });
+
+  // 示例文字：第一次 focus/click 自动清空
+  document.querySelectorAll('.auto-clear').forEach(el=>{
+    el.dataset.defaultText=el.value;
+    const clearIfSample=()=>{
+      if(!el.dataset.cleared && el.value===el.dataset.defaultText){
+        el.value=''; el.dataset.cleared='1';
+      }
+    };
+    el.addEventListener('focus',clearIfSample);
+    el.addEventListener('click',clearIfSample);
+  });
+
+  // STEP3 简历优化：工程表述 → 岗位语境（按目标 JD 重构）
+  const resumeNew=document.getElementById('resumeNew');
+  const rewriteBtn=document.getElementById('rewriteBtn');
+  function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  // 根据 JD 识别目标角色（样品本地模拟用，真实改写由 DeepSeek 完成）
+  function detectRole(jd){
+    const j=(jd||'').toLowerCase();
+    const map=[
+      {key:'ai',name:'AI/大模型',words:['ai','大模型','agent','智能体','算法','智能化','机器']},
+      {key:'data',name:'数据分析',words:['数据','分析','bi','sql','报表','可视化']},
+      {key:'sales',name:'销售/BD',words:['bd','销售','商务','拓展','渠道','客户']},
+      {key:'ops',name:'运营',words:['运营','增长','用户','活动','社群','内容']},
+      {key:'pm',name:'项目管理',words:['项目经理','pmo','交付管理','项目管']},
+      {key:'product',name:'产品经理',words:['产品','需求','prd','版本','功能']}
+    ];
+    for(const m of map){ if(m.words.some(w=>j.includes(w))) return m; }
+    return {key:'any',name:'目标岗位'};
+  }
+  // 工程术语 → 不同目标角色下的可迁移表述
+  const BASE=[
+    {re:/项目全周期管理|从投标到交付|全周期管理|全周期/g, v:{any:'项目全生命周期管理与交付管控',product:'产品全生命周期管理与版本节奏把控',ops:'从0到1项目操盘与运营节奏把控',sales:'端到端项目交付与客户成功闭环',data:'数据驱动的项目全流程管控',ai:'AI 产品落地交付与场景验证',pm:'项目全生命周期管理与里程碑管控'}},
+    {re:/甲方对接|对接甲方|甲方关系|甲方需求/g, v:{any:'客户界面的需求洞察与共识推动',product:'用户/客户视角的需求洞察与共识推动',ops:'用户增长与需求运营',sales:'客户关系经营与商机推进',data:'业务侧数据需求理解',ai:'业务场景需求抽象与对齐',pm:'干系人沟通与需求对齐'}},
+    {re:/招投标|招标/g, v:{any:'商务逻辑与竞争策略',product:'商业逻辑与定价/报价策略',sales:'投标与商务谈判',data:'业务指标与归因分析',ai:'场景价值与ROI论证',pm:'商业论证与资源争取'}},
+    {re:/报价清单|报价/g, v:{any:'成本测算与商业敏感度',product:'成本测算与商业敏感度',sales:'报价策略与毛利意识',data:'成本/收益量化分析',ai:'投入产出测算',pm:'预算与成本控制'}},
+    {re:/施工管理|现场施工管理|人员调度/g, v:{any:'复杂项目统筹与跨职能交付',product:'复杂项目统筹与跨职能协作',ops:'复杂业务落地与协同',sales:'交付资源统筹',data:'流程数字化与提效',ai:'工程化落地与规模化交付',pm:'项目统筹与资源调度'}},
+    {re:/供应链|供应商/g, v:{any:'资源协调与生态整合',product:'供应链/生态资源整合',ops:'供给端运营与资源整合',sales:'渠道与伙伴拓展',data:'供应数据洞察',ai:'算力/数据/模型资源整合',pm:'供应商与采购管理'}},
+    {re:/成本控制|成本管控|管控成本/g, v:{any:'成本意识与ROI意识',product:'成本意识与商业敏感度',sales:'毛利与费效意识',data:'成本/收益量化',ai:'成本与效果平衡',pm:'成本与进度平衡'}},
+    {re:/带\s*[\d]+\s*人|管理团队|团队管理/g, v:{any:'跨职能团队管理与协作',product:'跨职能团队管理与协作',ops:'业务团队带教与协同',sales:'销售团队管理',data:'数据团队协同',ai:'算法/工程团队协同',pm:'项目团队管理'}},
+    {re:/现场问题|现场执行/g, v:{any:'需求与风险闭环',product:'需求与风险问题闭环',ops:'业务问题与复盘',sales:'客户问题响应',data:'异常分析与定位',ai:'问题归因与迭代',pm:'风险管控与变更管理'}},
+    {re:/BIM/g, v:{any:'数字化与数据化表达',product:'数字化与数据化表达',data:'数据建模与可视化',ai:'数字孪生/模型化表达',pm:'数字化交付'}}
+  ];
+  function rewriteOne(line, role){
+    let after=escapeHtml(line);
+    BASE.forEach(t=>{ after=after.replace(t.re,'<span class="hl">'+escapeHtml(t.v[role.key]||t.v.any)+'</span>'); });
+    if(after===escapeHtml(line)){
+      after=escapeHtml(line)+' <span class="hl">（可迁移：复杂项目的统筹与交付能力，契合「'+role.name+'」）</span>';
+    }
+    return {orig:line, after};
+  }
+  // 纯文本简历（txt 导出 / 复制降级），从 canonical 模型生成，与模板结构一致
+  function resumePlain(){
+    return resumePlainFrom(lastResume);
+  }
+  function resumePlainFrom(d){
+    d=d||{};
+    const info=d.info||{}, intent=d.intent||{};
+    const L=[];
+    L.push(info.name||'【你的姓名】');
+    const ci=[info.phone&&('电话：'+info.phone), info.email&&('邮箱：'+info.email), info.city&&('城市：'+info.city), info.salary&&('期望薪资：'+info.salary)].filter(Boolean).join(' | ');
+    if(ci) L.push(ci);
+    L.push('');
+    L.push('求职意向');
+    L.push('  意向岗位：'+(intent.job||'（请填写）')+(intent.city?('  意向城市：'+intent.city):''));
+    const edu=(d.education||[]).filter(e=>e&&(e.school||e.major||e.period));
+    if(edu.length){ L.push(''); L.push('教育经历'); edu.forEach(e=>{ L.push('  '+(e.period||'')+' '+(e.school||'')); if(e.major)L.push('  '+e.major); if(e.extra)L.push('  '+e.extra); }); }
+    const work=(d.work||[]).filter(w=>w&&(w.org||(w.duties&&w.duties.length)));
+    if(work.length){ L.push(''); L.push('工作经历'); work.forEach(w=>{ L.push('  '+(w.period||'')+' '+(w.org||'')); if(w.role)L.push('  '+w.role); if((w.duties||[]).length){ L.push('  工作职责：'); w.duties.forEach((x,i)=>L.push('  '+(i+1)+'. '+x)); } if((w.achievements||[]).length){ L.push('  工作业绩：'); w.achievements.forEach((x,i)=>L.push('  '+(i+1)+'. '+x)); } }); }
+    const proj=(d.projects||[]).filter(p=>p&&(p.name||(p.duties&&p.duties.length)));
+    if(proj.length){ L.push(''); L.push('项目经历'); proj.forEach(p=>{ L.push('  '+(p.period||'')+' '+(p.name||'')); if(p.role)L.push('  '+p.role); if((p.duties||[]).length){ L.push('  项目职责：'); p.duties.forEach((x,i)=>L.push('  '+(i+1)+'. '+x)); } if(p.desc)L.push('  项目描述：'+p.desc); if((p.achievements||[]).length){ L.push('  项目业绩：'); p.achievements.forEach((x,i)=>L.push('  '+(i+1)+'. '+x)); } }); }
+    const ev=(d.evaluation||[]).filter(Boolean);
+    if(ev.length){ L.push(''); L.push('自我评价'); ev.forEach((x,i)=>L.push('  '+(i+1)+'. '+x)); }
+    return L.join('\n');
+  }
+  rewriteBtn.addEventListener('click',async ()=>{
+    const t=(selfdesc.value||'').trim();
+    const jd=(document.getElementById('jdInput').value||'').trim();
+    if(!t){
+      resumeNew.innerHTML='<div style="color:var(--red);padding:12px 14px;background:rgba(217,45,32,.08);border:1px solid rgba(217,45,32,.25);border-radius:10px;line-height:1.7">⚠️ 请先在 STEP1 填写你的背景 / 简历（或上传文件），再点击「一键 AI 改写」。</div>';
+      goStep(0);
+      return;
+    }
+    const role=detectRole(jd);
+    const sections=parseResume(t);                  // 仅本地回退时使用
+    const jdRole=extractTargetRole(jd);              // 从你给的 JD 提取真实岗位名
+    rewriteBtn.disabled=true;rewriteBtn.textContent='✨ AI 改写中…';
+    resumeNew.innerHTML='<div class="r-target">⏳ 正在调用 AI 改写，请稍候…</div>';
+    try{
+      const data=await rewriteWithAI(t, jd);         // 直接把原始简历 + JD 交给 AI，重组成模板 5 段式
+      if(!data||(!data.work.length&&!data.projects.length&&!data.education.length)) throw new Error('空结果');
+      data.intent=data.intent||{};
+      data.intent.job=jdRole||data.intent.job||role.name;   // 优先用 JD 里的岗位名
+      resumeNew.dataset.target=data.intent.job;
+      lastResume=data;
+      resumeNew.innerHTML=renderRewritePreview(data);
+    }catch(e){
+      console.warn('AI 改写失败，已回退本地模板：',e.message,'\nAI raw:',e.aiRaw);
+      const msg=String(e.message||'');
+      const aiRaw=String(e.aiRaw||'');
+      const isNet=/Refused to connect|CSP|Content Security Policy|CORS|Failed to fetch|NetworkError|net::ERR|超时|timed out|aborted|interception/i.test(msg);
+      const data=localResume(role, sections);
+      data.intent.job=jdRole||data.intent.job||role.name;
+      resumeNew.dataset.target=data.intent.job;
+      lastResume=data;
+      const preview=renderRewritePreview(data);
+      const hasPreview=preview && !preview.includes('未解析到工作');
+      const fallbackHelp='<div style="color:var(--sub);padding:10px 0">本地模板未解析到经历。建议把 STEP1 简历按「工作经历 → 公司 → 1·2·3·4 职责」整理，或至少粘贴一段具体职责描述。</div>';
+      const netTip=isNet
+        ? '<div class="r-target" style="border-color:rgba(217,45,32,.35);color:var(--red);margin-bottom:14px">⚠️ DeepSeek 网络调用失败（可能被网络/防火墙拦截），已自动切换本地模板改写。</div>'
+        : '<div class="r-target" style="border-color:rgba(217,45,32,.35);color:var(--red);margin-bottom:14px">⚠️ AI 调用失败（'+escapeHtml(msg)+'），已自动切换本地模板改写。</div>';
+      const diag='<details style="margin-top:12px;padding:10px;background:rgba(0,0,0,.04);border-radius:8px;font-size:12px;color:var(--sub);line-height:1.6"><summary style="cursor:pointer;font-weight:600;color:#0a6cff">🔍 诊断信息（点开，可截图发我看）</summary>'
+        +'<div style="margin-top:8px"><b>STEP1 文本长度：</b>'+t.length+' 字</div>'
+        +'<div style="margin-top:4px"><b>文本前 100 字：</b>'+escapeHtml(t.slice(0,100))+'…</div>'
+        +'<div style="margin-top:4px"><b>JD 长度：</b>'+jd.length+' 字</div>'
+        +'<div style="margin-top:4px"><b>JD 前 100 字：</b>'+escapeHtml(jd.slice(0,100))+'…</div>'
+        +'<div style="margin-top:4px"><b>AI 原始返回（完整，最多 1500 字）：</b><br/><div style="max-height:160px;overflow:auto;border:1px solid #ddd;border-radius:6px;padding:6px;background:#fff">'+escapeHtml((aiRaw||'').slice(0,1500))+(aiRaw&&aiRaw.length>1500?'…':'')+'</div></div>'
+        +'<div style="margin-top:4px"><b>错误：</b>'+escapeHtml(msg)+'</div>'
+        +'</details>';
+      if(hasPreview){
+        resumeNew.innerHTML=netTip+'<div class="r-target" style="border-color:var(--green);color:var(--green);margin-bottom:14px">✓ 已使用本地模板改写（STAR 法则 + 目标岗位 JD）</div>'+preview+diag;
+      }else{
+        resumeNew.innerHTML=netTip+fallbackHelp+diag;
+      }
+    }finally{
+      rewriteBtn.disabled=false;rewriteBtn.textContent='✨ 一键 AI 改写';
+    }
+  });
+
+  // ===== STEP3 JD 多文件上传（图片 / PDF）+ 自动 OCR / 文本提取 =====
+  const jdUpBtn=document.getElementById('jdUpBtn');
+  const jdImgIn=document.getElementById('jdImgIn');
+  const jdImgName=document.getElementById('jdImgName');
+  const jdThumbs=document.getElementById('jdThumbs');
+  const jdClearAll=document.getElementById('jdClearAll');
+  let jdFiles=[];   // {id,name,type:'image'|'pdf',file,dataUrl,text,status,appended}
+  let jdUid=0;
+  function loadTesseract(){
+    return new Promise((resolve,reject)=>{
+      if(window.Tesseract) return resolve(window.Tesseract);
+      const s=document.createElement('script');
+      s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.0.2/dist/tesseract.min.js';
+      s.onload=()=>window.Tesseract?resolve(window.Tesseract):reject(new Error('OCR 库未就绪'));
+      s.onerror=()=>reject(new Error('OCR 库加载失败（需联网）'));
+      document.head.appendChild(s);
+    });
+  }
+  // 预处理 JD 截图：适度放大 + 灰度化，提升 OCR 中文识别率
+  function preprocessImage(dataUrl){
+    return new Promise((resolve,reject)=>{
+      const img=new Image();
+      img.onload=()=>{
+        const scale=Math.min(2.5, 1600/Math.max(img.width,img.height));
+        const w=Math.round(img.width*scale), h=Math.round(img.height*scale);
+        const c=document.createElement('canvas'); c.width=w; c.height=h;
+        const ctx=c.getContext('2d');
+        ctx.drawImage(img,0,0,w,h);
+        try{
+          const imgData=ctx.getImageData(0,0,w,h); const d=imgData.data;
+          for(let i=0;i<d.length;i+=4){
+            const gray=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];
+            d[i]=d[i+1]=d[i+2]=gray;
+          }
+          ctx.putImageData(imgData,0,0);
+        }catch(e){}
+        resolve(c.toDataURL('image/png'));
+      };
+      img.onerror=reject;
+      img.src=dataUrl;
+    });
+  }
+  function renderThumbs(){
+    jdThumbs.innerHTML=jdFiles.map(f=>`
+      <div class="jd-thumb" data-id="${f.id}">
+        ${f.type==='pdf'
+          ? `<div style="height:130px;display:grid;place-items:center;background:#000;border-radius:8px;color:var(--cyan);font-size:13px">📄 PDF</div>`
+          : `<img src="${f.dataUrl}" alt="${escapeHtml(f.name)}">`}
+        <div class="tname" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</div>
+        <div class="badge-ocr">${escapeHtml(f.status||'')}</div>
+        <div class="tactions">
+          <button type="button" class="copy-btn" data-act="ocr">🔍 ${f.appended?'重新识别':'识别'}</button>
+          <button type="button" class="copy-btn" data-act="del">✕</button>
+        </div>
+      </div>`).join('');
+    jdThumbs.classList.toggle('show', jdFiles.length>0);
+    jdClearAll.style.display=jdFiles.length>0?'inline-block':'none';
+  }
+  function appendToJD(text, label, f){
+    if(f && f.appended) return;            // 同一文件不重复追加
+    const clean=(text||'').trim(); if(!clean) return;
+    const ta=document.getElementById('jdInput');
+    ta.value=(ta.value?ta.value+'\n\n':'')+`【${label}】\n`+clean;
+    if(f) f.appended=true;
+  }
+  async function recognizeImage(f){
+    f.status='⏳ 预处理…'; renderThumbs();
+    try{
+      const src=await preprocessImage(f.dataUrl);
+      f.status='⏳ 加载 OCR 引擎…'; renderThumbs();
+      const T=await loadTesseract();
+      const res=await T.recognize(src,'chi_sim+eng',{ logger:m=>{
+        if(m&&m.status==='recognizing text'){ f.status='🔍 识别中… '+Math.round((m.progress||0)*100)+'%'; renderThumbs(); }
+      }});
+      const txt=(res.data.text||'').trim();
+      if(!txt){ f.status='⚠️ 未识别到文字'; }
+      else{ f.text=txt; f.status='✓ 已识别'; appendToJD(txt, f.name, f); }
+    }catch(err){
+      f.status='✗ 失败：'+(err.message||err).slice(0,32);
+    }
+    renderThumbs();
+  }
+  async function extractPdf(f){
+    f.status='⏳ 解析 PDF…'; renderThumbs();
+    try{
+      const txt=await parsePDF(f.file);
+      const clean=txt.replace(/\s+/g,' ').trim();
+      if(!clean){ f.status='⚠️ 无文本层'; }
+      else{ f.text=clean; f.status='✓ 已提取'; appendToJD(clean, f.name, f); }
+    }catch(err){
+      f.status='✗ PDF 失败：'+(err.message||err).slice(0,32);
+    }
+    renderThumbs();
+  }
+  jdUpBtn.addEventListener('click',()=>jdImgIn.click());
+  jdImgIn.addEventListener('change',async e=>{
+    const files=Array.from(e.target.files||[]); if(!files.length)return;
+    for(const f of files){
+      const isPdf=/\.pdf$/i.test(f.name);
+      const item={id:++jdUid, name:f.name, type:isPdf?'pdf':'image', file:f, dataUrl:'', text:'', status:'⏳ 读取…', appended:false};
+      if(!isPdf){
+        await new Promise(res=>{ const r=new FileReader(); r.onload=()=>{item.dataUrl=r.result;res();}; r.onerror=()=>{item.dataUrl='';res();}; r.readAsDataURL(f); });
+      }
+      jdFiles.push(item); renderThumbs();
+      if(isPdf) extractPdf(item); else recognizeImage(item);
+    }
+    jdImgName.textContent='✓ 已加入 '+jdFiles.length+' 个文件（识别后自动填入下方 JD，可逐张「重新识别」/「✕」移除）';
+    jdImgIn.value='';
+  });
+  jdThumbs.addEventListener('click',e=>{
+    const btn=e.target.closest('button[data-act]'); if(!btn)return;
+    const id=+btn.closest('.jd-thumb').dataset.id;
+    const f=jdFiles.find(x=>x.id===id); if(!f)return;
+    if(btn.dataset.act==='del'){ jdFiles=jdFiles.filter(x=>x.id!==id); renderThumbs(); }
+    else if(btn.dataset.act==='ocr'){
+      if(!f.appended && f.text){ appendToJD(f.text, f.name, f); }  // 已识别过则补填一次
+      else if(f.type==='pdf') extractPdf(f); else recognizeImage(f);
+    }
+  });
+  jdClearAll.addEventListener('click',()=>{
+    if(!confirm('确定清空所有已上传的 JD 文件？')) return;
+    jdFiles=[]; renderThumbs(); jdImgName.textContent='';
+  });
+
+  // 复制改写结果（结构化简历纯文本）
+  document.getElementById('copyBtn').addEventListener('click',()=>{
+    const text=resumePlain();
+    if(!text){alert('还没有改写结果，请先点击「一键 AI 改写」。');return;}
+    navigator.clipboard.writeText(text).then(()=>{
+      const btn=document.getElementById('copyBtn');
+      const old=btn.textContent;
+      btn.textContent='✓ 已复制';
+      setTimeout(()=>btn.textContent=old,1500);
+    }).catch(()=>alert('复制失败，请手动选择文本复制。'));
+  });
+  // 复制带格式（富文本 HTML 入剪贴板，粘进 Word 保持版式）
+  document.getElementById('copyHtmlBtn').addEventListener('click',async ()=>{
+    if(!lastResume){alert('还没有改写结果，请先点击「一键 AI 改写」。');return;}
+    const frag=resumeDocHTML(lastResume);
+    const full=`<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+      body{font-family:'Microsoft YaHei','PingFang SC',SimSun,sans-serif;font-size:12pt;color:#1f2937;line-height:1.7}
+      .rp{color:#1f2937;max-width:800px;margin:0 auto}
+      .rp-name{font-size:22pt;font-weight:800;color:#0f172a;text-align:center;margin-bottom:4px}
+      .rp-contact{font-size:11pt;color:#475569;text-align:center;margin-top:4px;padding-bottom:10px;border-bottom:2px solid #0ea5e9}
+      .rp-sec{margin-top:16px}
+      .rp-sec-h{font-size:13pt;font-weight:700;color:#0369a1;border-bottom:1px solid #cbd5e1;padding-bottom:4px;margin-bottom:8px}
+      .rp-intent{font-size:11pt;color:#334155;margin-top:4px}
+      .rp-intent b{color:#0e7490}
+      .rp-sub{margin:8px 0 2px}
+      .rp-period{font-weight:600;color:#334155}
+      .rp-org{font-weight:700;color:#0f172a;margin-left:10px}
+      .rp-role{font-size:10.5pt;color:#64748b;margin:2px 0}
+      .rp-line{font-size:10.5pt;color:#334155;line-height:1.7}
+      .rp-label{font-weight:600;color:#334155;margin-top:5px}
+      .rp-desc{font-size:10.5pt;color:#334155;line-height:1.8;margin:2px 0}
+      ol.rp-list{margin:2px 0 4px;padding-left:22px}
+      ol.rp-list li{font-size:10.5pt;line-height:1.8;color:#1f2937;margin-bottom:3px}
+      .rp-list b{color:#0e7490}
+    </style></head><body>${frag}</body></html>`;
+    const btn=document.getElementById('copyHtmlBtn');
+    const old=btn.textContent;
+    try{
+      if(navigator.clipboard&&window.ClipboardItem){
+        await navigator.clipboard.write([new ClipboardItem({
+          'text/html':new Blob([full],{type:'text/html'}),
+          'text/plain':new Blob([resumePlain()],{type:'text/plain'})
+        })]);
+        btn.textContent='✓ 已复制（带格式）';
+      }else{
+        navigator.clipboard.writeText(resumePlain());
+        btn.textContent='✓ 已复制（文本）';
+      }
+    }catch(e){
+      navigator.clipboard.writeText(resumePlain()).then(()=>btn.textContent='✓ 已复制（文本）').catch(()=>alert('复制失败，请手动选择文本复制。'));
+    }
+    setTimeout(()=>btn.textContent=old,1800);
+  });
+
+  // 导出优化简历（Word .docx，真实可用；CDN 不可用时回退 txt）
+  const exportBtn=document.getElementById('exportBtn');
+  // html-docx-js 懒加载（0.3.1 已内置 JSZip，UMD 暴露 window.htmlDocx）
+  function loadScript(src){
+    return new Promise((res,rej)=>{
+      if(window.htmlDocx) return res();
+      const existing=document.querySelector('script[src="'+src+'"]');
+      if(existing){
+        if(window.htmlDocx) return res();
+        existing.addEventListener('load',()=>window.htmlDocx?res():rej(new Error('库加载失败：'+src)));
+        existing.addEventListener('error',()=>rej(new Error('库加载失败：'+src)));
+        return;
+      }
+      const s=document.createElement('script'); s.src=src; s.async=true;
+      s.onload=()=>window.htmlDocx?res():rej(new Error('库加载失败：'+src));
+      s.onerror=()=>rej(new Error('库加载失败：'+src));
+      document.head.appendChild(s);
+    });
+  }
+  async function loadHtmlDocx(){
+    if(window.htmlDocx) return window.htmlDocx;
+    await loadScript('https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js');
+    if(!window.htmlDocx) throw new Error('htmlDocx 未就绪');
+    return window.htmlDocx;
+  }
+  function downloadBlob(blob, filename){
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download=filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 1500);
+  }
+  // ===== 内置零依赖 .docx 生成器（CDN 不可用时兜底，保证输出 .docx 而非 txt）=====
+  function escapeXml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  const CRC_TABLE=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
+  function crc32(bytes){let c=0xFFFFFFFF;for(let i=0;i<bytes.length;i++)c=CRC_TABLE[(c^bytes[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+  function makeZip(parts){
+    const enc=new TextEncoder();
+    const out=[], central=[]; let offset=0;
+    for(const p of parts){
+      const nameBytes=enc.encode(p.name);
+      const data=p.data; const crc=crc32(data); const size=data.length;
+      const lh=new Uint8Array(30+nameBytes.length); const dv=new DataView(lh.buffer);
+      dv.setUint32(0,0x04034b50,true); dv.setUint16(4,20,true); dv.setUint16(6,0,true);
+      dv.setUint16(8,0,true); dv.setUint16(10,0,true); dv.setUint16(12,0,true);
+      dv.setUint32(14,crc,true); dv.setUint32(18,size,true); dv.setUint32(22,size,true);
+      dv.setUint16(26,nameBytes.length,true); dv.setUint16(28,0,true);
+      lh.set(nameBytes,30); out.push(lh,data);
+      const ch=new Uint8Array(46+nameBytes.length); const cd=new DataView(ch.buffer);
+      cd.setUint32(0,0x02014b50,true); cd.setUint16(4,20,true); cd.setUint16(6,20,true);
+      cd.setUint16(8,0,true); cd.setUint16(10,0,true); cd.setUint16(12,0,true);
+      cd.setUint32(14,crc,true); cd.setUint32(18,size,true); cd.setUint32(22,size,true);
+      cd.setUint16(26,nameBytes.length,true); cd.setUint16(28,0,true); cd.setUint16(30,0,true);
+      cd.setUint16(32,0,true); cd.setUint16(34,0,true); cd.setUint16(36,0,true);
+      cd.setUint32(38,0,true); cd.setUint32(42,offset,true); ch.set(nameBytes,46); central.push(ch);
+      offset+=lh.length+data.length;
+    }
+    const centralSize=central.reduce((a,c)=>a+c.length,0);
+    const end=new Uint8Array(22); const ed=new DataView(end.buffer);
+    ed.setUint32(0,0x06054b50,true); ed.setUint16(4,0,true); ed.setUint16(6,0,true);
+    ed.setUint16(8,parts.length,true); ed.setUint16(10,parts.length,true);
+    ed.setUint32(12,centralSize,true); ed.setUint32(16,offset,true); ed.setUint16(20,0,true);
+    const all=out.concat(central,[end]); let len=0; all.forEach(a=>len+=a.length);
+    const result=new Uint8Array(len); let pos=0; all.forEach(a=>{result.set(a,pos);pos+=a.length;});
+    return result;
+  }
+  function buildPlainDocx(text){
+    const enc=new TextEncoder();
+    const paras=String(text).split('\n').map(l=>`<w:p><w:r><w:t xml:space="preserve">${escapeXml(l)}</w:t></w:r></w:p>`).join('');
+    const documentXml=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${paras}<w:sectPr/></w:body></w:document>`;
+    const contentTypes=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`;
+    const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
+    const bytes=makeZip([
+      {name:'[Content_Types].xml',data:enc.encode(contentTypes)},
+      {name:'_rels/.rels',data:enc.encode(rels)},
+      {name:'word/document.xml',data:enc.encode(documentXml)}
+    ]);
+    return new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+  }
+  exportBtn.addEventListener('click',async ()=>{
+    // 只导出 STEP3 AI 优化后的简历（参照「个人简历模板」排版），不再附带背景概述 / JD / 技能盘点等辅助内容
+    if(!lastResume){
+      alert('请先在 STEP3 点击「一键 AI 改写」生成优化简历，再导出。');
+      return;
+    }
+    const date=new Date().toLocaleDateString('zh-CN');
+    const target=resumeNew.dataset.target||'优化简历';
+    const fname=`优化简历_${target}_${date.replace(/\//g,'-')}.docx`;
+    const old=exportBtn.textContent;
+    exportBtn.disabled=true; exportBtn.textContent='📄 正在生成 Word…';
+    const resumeHtml=resumeDocHTML(lastResume);
+    const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+      body{font-family:'Microsoft YaHei','PingFang SC',SimSun,sans-serif;font-size:11pt;color:#1f2937;line-height:1.6;margin:0;padding:28px}
+      .rp{max-width:760px;margin:0 auto}
+      .rp-name{font-size:24pt;font-weight:800;color:#0f172a;text-align:center;letter-spacing:3px;margin-bottom:2px}
+      .rp-contact{font-size:10.5pt;color:#475569;text-align:center;padding:8px 0 12px}
+      .rp-sec{margin-top:18px}
+      .rp-sec-h{font-size:13pt;font-weight:800;color:#0f172a;border-left:4px solid #0a6cff;padding:2px 0 2px 10px;margin-bottom:8px;letter-spacing:1px}
+      .rp-intent{font-size:11pt;color:#334155;margin-top:4px}
+      .rp-intent b{color:#0e7490}
+      .rp-sub{margin:10px 0 2px}
+      .rp-period{font-weight:600;color:#334155}
+      .rp-org{font-weight:700;color:#0f172a;margin-left:10px}
+      .rp-role{font-size:10.5pt;color:#64748b;margin:2px 0}
+      .rp-line{font-size:10.5pt;color:#334155;line-height:1.7}
+      .rp-label{font-weight:700;color:#0f172a;margin-top:6px}
+      .rp-desc{font-size:10.5pt;color:#334155;line-height:1.8;margin:2px 0}
+      ol.rp-list{margin:4px 0 6px;padding-left:22px}
+      ol.rp-list li{font-size:10.5pt;line-height:1.8;color:#1f2937;margin-bottom:3px}
+      .hl, .rp-list b, .rp-desc b, .rp-line b{background:#d1fae5;color:#047857;font-weight:700;padding:0 2px;border-radius:3px}
+    </style></head><body>
+      ${resumeHtml}
+    </body></html>`;
+    try{
+      const htmlDocx=await loadHtmlDocx();
+      downloadBlob(htmlDocx.asBlob(html), fname);
+    }catch(e){
+      console.warn('Word 库不可用，使用内置生成器输出 .docx：',e);
+      downloadBlob(buildPlainDocx(resumePlain()), fname);
+    }finally{
+      exportBtn.disabled=false; exportBtn.textContent=old;
+    }
+  });
+  // 意见反馈：跳转到飞书多维表格表单
+  const feedbackBtn=document.getElementById('feedbackBtn');
+  if(feedbackBtn){
+    feedbackBtn.addEventListener('click',()=>{
+      window.open('https://qcnptspsm68j.feishu.cn/share/base/form/shrcnNfJ0t7qwmIocZLBoCPKWdf','_blank','noopener');
+    });
+  }
+
+  // ===== STEP4 学习路径：基于 STEP3 目标岗位动态生成 =====
+  const pathOut=document.getElementById('pathOut');
+  const gapOut=document.getElementById('gapOut');
+  let pathDoneFor='';
+  // 本地技能盘点：用关键词在 JD 与简历中双向匹配，得出「已具备 / 待补齐」
+  const SKILL_KW=['数据分析','SQL','Python','Excel','PRD','需求分析','产品设计','用户研究','竞品分析','Axure','Figma','原型','运营','用户增长','商业化','商务拓展','BD','销售','项目管理','PMP','敏捷','Scrum','AI','大模型','机器学习','算法','行业知识','领域经验','沟通协调','跨部门','团队管理','招投标','成本管控','供应链','风险管理','甲方对接','英语','出海','海外','文案','市场','测试','开发','后端','前端'];
+  function localGap(jd, resume){
+    const j=jd||'', r=resume||'';
+    const have=[], need=[];
+    SKILL_KW.forEach(k=>{
+      if(j.includes(k)){
+        if(r.includes(k)) have.push(k); else need.push(k);
+      }
+    });
+    if(!have.length) have.push('工程全周期管控','跨职能统筹与交付','甲方对接与风险协调');
+    if(!need.length) need.push('目标岗位所需的岗位方法论（请参考具体 JD 进一步对照）');
+    return {have, need};
+  }
+  async function planPathWithAI(jd, resume, target){
+    const system=`你是资深职业转型顾问。根据用户的【目标岗位JD】和【改写后的简历】，先做一次技能盘点，再定制 3 阶段学习路径（补认知→强迁移→冲offer）。\n要求：\n1）**技能盘点 gap**：对比 JD 要求与简历现有技能，列出「已具备技能 have」与「待补齐技能 need」（need 必须是 JD 要求但简历未体现的，如数据分析、SQL、PRD、商务拓展、行业知识等）；\n2）**3 阶段路径**：必须是针对该目标岗位的具体内容，绝不要默认成"产品经理"；need 中的技能必须在阶段一/阶段二中安排补齐；每阶段给出 3 条 items（说明「该阶段做什么 / 交付物」），并给出 **5 条 resources**（具体在哪学、用什么资料）；\n3）**resources 要求**：resources 数组每个字符串必须「以中文「平台：」开头 + 以一个真实 http/https 链接结尾」，**每条都必须可点击**；禁止出现"搜索 xxx""网上搜""详见官网"这类无链接的纯描述；需要搜索时直接给出 B 站搜索 / 知乎搜索 / CSDN 搜索的真实 URL；平台必须优先用**国内可直接访问**的：B 站、极客时间、慕课网、网易云课堂、知乎、CSDN、微信读书、菜鸟教程、W3Cschool、稀土掘金；尽量避免 Coursera、LangChain 官网、OpenAI 官网等国内访问不稳定/常超时的链接；资料要具体到课程名 / 书名 / 文档关键词；\n4）只输出 JSON：{"gap":{"have":["..."],"need":["..."]},"phases":[{"ph":"阶段一 · 名称（时长）","items":["该阶段做什么 / 交付物","...","..."],"resources":["平台：具体课程/书籍/文档","...","...","...","..."]},{"ph":"阶段二 · 名称（时长）","items":["...","...","..."],"resources":["...","...","...","...","..."]},{"ph":"阶段三 · 名称（持续）","items":["...","...","..."],"resources":["...","...","...","...","..."]}]}。items / resources 可用 **加粗** 标重点。不要解释文字。`;
+    const user=`目标岗位：${target||'（见 JD）'}\n目标岗位JD：\n${jd||'（未填写）'}\n改写后的简历：\n${resume||'（未生成）'}`;
+    const raw=await callDeepSeek(system,user,true);
+    const data=parseJSONSafe(raw);
+    if(!data||!Array.isArray(data.phases)) throw new Error('解析失败');
+    const g=data.gap||{};
+    return {
+      gap:{ have:(g.have||[]).map(x=>escapeHtml(x)), need:(g.need||[]).map(x=>escapeHtml(x)) },
+      phases: data.phases.map(p=>({ph:p.ph||'', items:(p.items||[]).map(i=>highlight(i)), resources:(p.resources||[]).map(i=>highlight(i))}))
+    };
+  }
+  // 技能 → 学习资源 映射（国内可直接访问平台 + 真实可点击链接，每条独立成项，render 时自动转 <a>）
+  const RESOURCE_MAP=[
+    {k:['数据','sql','python','excel','分析','bi','报表'], r:[
+      'B 站「SQL 入门」系统课：https://search.bilibili.com/all?keyword=SQL%20%E5%85%A5%E9%97%A8',
+      '菜鸟教程 SQL：https://www.runoob.com/sql/sql-tutorial.html',
+      'Python 数据分析（B站）：https://search.bilibili.com/all?keyword=Python%20%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90'
+    ]},
+    {k:['prd','需求','产品','原型','axure','figma','交互'], r:[
+      'B 站产品经理实战：https://search.bilibili.com/all?keyword=%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86%E5%AE%9E%E6%88%98',
+      '人人都是产品经理入门：http://www.woshipm.com/',
+      'Axure 中文网教程：http://www.axure.org/'
+    ]},
+    {k:['ai','大模型','agent','算法','机器学习','智能','模型'], r:[
+      '李宏毅机器学习（B 站）：https://www.bilibili.com/video/BV1Wv411h7kN',
+      'B 站「大模型 Agent」实战：https://search.bilibili.com/all?keyword=%E5%A4%A7%E6%A8%A1%E5%9E%8B%20Agent%20%E5%AE%9E%E6%88%98',
+      '稀土掘金 AI 专栏：https://juejin.cn/search?query=AI%20Agent'
+    ]},
+    {k:['运营','增长','用户','社群','内容','活动'], r:[
+      '人人都是产品经理社区：http://www.woshipm.com/',
+      '《增长黑客》微信读书：https://weread.qq.com/web/search/books?keyword=%E5%A2%9E%E9%95%BF%E9%BB%91%E5%AE%A2',
+      '运营研究社（知乎）：https://www.zhihu.com/search?type=content&q=%E8%BF%90%E8%90%A5%E5%A2%9E%E9%95%BF'
+    ]},
+    {k:['bd','销售','商务','谈判','拓展','客户','渠道'], r:[
+      '微信读书《顾问式销售》：https://weread.qq.com/web/search/books?keyword=%E9%A1%BE%E9%97%AE%E5%BC%8F%E9%94%80%E5%94%AE',
+      'B 站大客户销售实战：https://search.bilibili.com/all?keyword=%E5%A4%A7%E5%AE%A2%E6%88%B7%E9%94%80%E5%94%AE%E5%AE%9E%E6%88%98',
+      '销售话术与谈判（知乎）：https://www.zhihu.com/search?type=content&q=%E9%94%80%E5%94%AE%E8%B0%88%E5%88%A4'
+    ]},
+    {k:['项目','pmp','敏捷','scrum','管理','统筹'], r:[
+      'PMBOK 指南（微信读书）：https://weread.qq.com/web/search/books?keyword=PMBOK',
+      'B 站项目管理实战：https://search.bilibili.com/all?keyword=PMP%20%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86',
+      '敏捷开发 Scrum 入门（菜鸟教程）：https://www.runoob.com/w3cnote/agile-dev-process.html'
+    ]},
+    {k:['新能源','储能','低空','出海','海外','建筑','工程','行业','领域'], r:[
+      '36 氪行业研报：https://36kr.com/',
+      '发现报告：https://www.fxbaogao.com/',
+      '知乎「建筑转行」经验：https://www.zhihu.com/search?type=content&q=%E5%BB%BA%E7%AD%91%E8%BD%AC%E8%A1%8C'
+    ]},
+    {k:['英语','海外','出海'], r:[
+      'B 站商务英语：https://search.bilibili.com/all?keyword=%E5%95%86%E5%8A%A1%E8%8B%B1%E8%AF%AD',
+      '每日英语听力：https://dict.eudic.net/ting'
+    ]},
+    {k:['成本','造价','招投标','供应链','采购'], r:[
+      '广联达造价课堂：https://www.glodon.com/',
+      '采购与供应链管理（微信读书）：https://weread.qq.com/web/search/books?keyword=%E9%87%87%E8%B4%AD%E4%B8%8E%E4%BE%9B%E5%BA%94%E9%93%BE%E7%AE%A1%E7%90%86',
+      '供应链管理（知乎）：https://www.zhihu.com/search?type=content&q=%E4%BE%9B%E5%BA%94%E9%93%BE%E7%AE%A1%E7%90%86'
+    ]},
+    {k:['风险','质量','安全'], r:[
+      '注册安全工程师教材（微信读书）：https://weread.qq.com/web/search/books?keyword=%E6%B3%A8%E5%86%8C%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E5%B8%88',
+      '项目管理风险管理（知乎）：https://www.zhihu.com/search?type=content&q=%E9%A1%B9%E7%9B%AE%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86'
+    ]}
+  ];
+  function suggestResources(need, roleName){
+    const out=[];
+    (need||[]).forEach(n=>{
+      for(const m of RESOURCE_MAP){ if(m.k.some(k=>String(n).toLowerCase().includes(k))){ out.push(...m.r); break; } }
+    });
+    const seen=new Set(); const uniq=out.filter(r=>{ if(seen.has(r))return false; seen.add(r); return true; });
+    const kw=encodeURIComponent(roleName||'转行');
+    const extra=[
+      `B 站「${roleName} 入门到实战」：https://search.bilibili.com/all?keyword=${kw}%20%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98`,
+      `知乎「${roleName}」经验与资料：https://www.zhihu.com/search?type=content&q=${kw}`,
+      '招聘 JD 逐条复盘：把岗位要求映射到自己的工程经历（BOSS 直聘）：https://www.zhipin.com/'
+    ];
+    let i=0; while(uniq.length<5 && i<extra.length) uniq.push(extra[i++]);
+    return uniq.slice(0,5);
+  }
+  // 本地模板：按目标岗位名生成（无 Key / CORS 失败时回退）
+  function localPlan(roleName, jd, resume){
+    const R=roleName||'目标岗位';
+    const gap=localGap(jd, resume);
+    const needTxt=gap.need.slice(0,4).join('、');
+    const res=gap.need.length
+      ? suggestResources(gap.need, R)
+      : [`B 站「${R}」系统课：https://search.bilibili.com/all?keyword=${encodeURIComponent(R)}`,`知乎 / CSDN「${R}」经验：https://www.zhihu.com/search?type=content&q=${encodeURIComponent(R)}`,'招聘 JD 逐条复盘，把要求映射到你的工程经历（BOSS 直聘）：https://www.zhipin.com/'];
+    const phases=[
+      {ph:`阶段一 · 补认知（4–6 周）`, items:[
+        `对照「${R}」岗位能力模型，梳理自身工程背景的<b>可迁移点</b>（见左侧「已具备技能」）`,
+        `重点补齐待掌握项：<b>${needTxt}</b>——学对应方法论并跑通 1 个 Mini 练习`,
+        `交付物：<b>岗位能力对照笔记 + 1 个 Mini 作品</b>（写进简历）`
+      ], resources:res},
+      {ph:`阶段二 · 强迁移（6–8 周）`, items:[
+        `把"施工全周期管理 / 跨职能交付"翻译成「${R}」讲得通的语言与案例`,
+        `结合目标行业（参考 JD）做垂直深耕，完成 1 份行业 / 竞品分析`,
+        `交付物：<b>1 份行业分析 / 竞品拆解报告</b>`
+      ], resources:res},
+      {ph:`阶段三 · 冲 offer（持续）`, items:[
+        `针对目标行业做岗位定向（新能源 / AI / 低空 / 出海等）`,
+        `模拟面试：把"现场管理 / 供应链 / 甲方对接"翻译成「${R}」的价值叙事`,
+        `交付物：<b>优化简历 + 3 段 STAR 案例</b>`
+      ], resources:[
+        '牛客网面经真题：https://www.nowcoder.com/discuss',
+        'STAR 案例写法（情境-任务-行动-结果）参考：https://www.nowcoder.com/discuss?query=STAR%E6%A1%88%E4%BE%8B',
+        'BOSS 直聘目标岗位面经搜索：https://www.zhipin.com/'
+      ]}
+    ];
+    return { gap, phases:phases.map(p=>({ph:p.ph, items:p.items.map(i=>highlight(i)), resources:p.resources.map(i=>highlight(i))})) };
+  }
+  function renderGap(gap){
+    const tags=arr=>arr.length?arr.map(x=>`<span class="sg-tag">${x}</span>`).join(''):'<span class="sg-empty">（无）</span>';
+    return `<div class="skill-gap">
+      <div class="sg-h">🧩 技能盘点：目标岗位 vs 我的简历</div>
+      <div class="sg-sub">左侧＝JD 要求且你的简历已体现（直接复用）；右侧＝JD 要求但简历暂未体现（需在下方路径中补齐）。</div>
+      <div class="sg-cols">
+        <div class="sg-col have"><h4>✅ 已具备技能</h4><div class="sg-tags">${tags(gap.have)}</div></div>
+        <div class="sg-col need"><h4>🚧 待补齐技能</h4><div class="sg-tags">${tags(gap.need)}</div></div>
+      </div>
+    </div>`;
+  }
+  function renderPhases(phases){
+    return phases.map((p,idx)=>`<div class="phase" data-phase-idx="${idx}"><div class="ph">${escapeHtml(p.ph)}</div><ul>${p.items.map(i=>`<li>${i}</li>`).join('')}</ul>${p.resources&&p.resources.length?`<div class="ph-res">📚 学习资源（在哪学 / 用什么资料）：</div><ul class="res-list">${p.resources.map(r=>`<li>${linkifyUrls(highlight(r))}</li>`).join('')}</ul>`:''}<div class="ph-actions"><button class="more-res-btn" data-phase-idx="${idx}">🔄 推荐更多学习资料</button><span class="more-res-status"></span></div></div>`).join('');
+  }
+  async function ensurePath(){
+    const jd=(document.getElementById('jdInput').value||'').trim();
+    if(jd===pathDoneFor && pathOut.dataset.done==='1') return; // 同一 JD 已生成，避免重复调用
+    pathOut.dataset.done='0'; gapOut.dataset.done='0';
+    gapOut.innerHTML='<div style="color:var(--sub);font-size:14px">⏳ 正在对比目标岗位与你的简历…</div>';
+    pathOut.innerHTML='<div class="phase" style="text-align:center;color:var(--sub)">⏳ DeepSeek 正在为你定制学习路径…</div>';
+    const resume=resumePlain();
+    const target=resumeNew.dataset.target||extractTargetRole(jd)||'目标岗位';
+    try{
+      const data=await planPathWithAI(jd, resume, target);
+      gapOut.innerHTML=renderGap(data.gap); gapOut.dataset.done='1';
+      pathOut.innerHTML=renderPhases(data.phases);
+      pathOut.dataset.done='1'; pathDoneFor=jd;
+    }catch(e){
+      console.warn('AI 路径生成失败，已回退本地模板：',e.message);
+      const data=localPlan(target, jd, resume);
+      gapOut.innerHTML=renderGap(data.gap); gapOut.dataset.done='1';
+      pathOut.innerHTML=renderPhases(data.phases);
+      pathOut.dataset.done='1'; pathDoneFor=jd;
+    }
+  }
+  // 单阶段追加学习资源：用户点击「推荐更多学习资料」时调用
+  async function fetchMoreResources(phaseIdx, btn){
+    btn.disabled=true; const status=btn.parentNode.querySelector('.more-res-status');
+    const oldText=btn.textContent; btn.textContent='⏳ AI 推荐中…';
+    try{
+      const jd=(document.getElementById('jdInput').value||'').trim();
+      const target=resumeNew.dataset.target||extractTargetRole(jd)||'目标岗位';
+      const phaseEl=btn.closest('.phase');
+      const phaseName=phaseEl?phaseEl.querySelector('.ph').textContent.replace(/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u,'').trim():('阶段 '+(phaseIdx+1));
+      const resume=resumePlain();
+      const system='你是学习路径推荐顾问。根据【目标岗位】和【阶段名称】，额外推荐 6 条与该阶段高度匹配的学习资源。\n要求：\n1）每条格式：「平台：具体课程 / 书籍 / 文档名 + 真实 https 链接」；\n2）平台优先国内可直接访问的：B 站、慕课网、极客时间、网易云课堂、知乎、CSDN、微信读书、菜鸟教程、稀土掘金；避免 Coursera / 国外官网（国内访问常超时）；\n3）资源要具体到课程名 / 书名 / 关键词，且和当前阶段（补认知 / 强迁移 / 冲 offer）强相关；\n4）只输出 JSON：{"resources":["平台：...","...","...","...","...","..."]}，不要任何解释文字。';
+      const user=`目标岗位：${target}\n当前阶段：${phaseName}\n用户简历摘要：${(resume||'').slice(0,800)}`;
+      const raw=await callDeepSeek(system,user,true);
+      const data=parseJSONSafe(raw);
+      const list=(data&&Array.isArray(data.resources))?data.resources:[];
+      if(list.length){
+        const ul=phaseEl.querySelector('.res-list');
+        const items=list.map(r=>`<li>${linkifyUrls(highlight(r))}</li>`).join('');
+        if(ul) ul.insertAdjacentHTML('beforeend', items);
+        else {
+          const resDiv=document.createElement('div'); resDiv.className='ph-res'; resDiv.textContent='📚 学习资源（在哪学 / 用什么资料）：';
+          const ulNew=document.createElement('ul'); ulNew.className='res-list'; ulNew.innerHTML=items;
+          phaseEl.querySelector('.ph-actions').insertAdjacentElement('beforebegin', resDiv);
+          phaseEl.querySelector('.ph-res').insertAdjacentElement('afterend', ulNew);
+        }
+        status.textContent='✓ 已新增 '+list.length+' 条';
+      } else {
+        status.textContent='⚠️ AI 未返回资源';
+      }
+    }catch(e){
+      console.warn('追加资源失败：',e);
+      status.textContent='❌ '+(e.message||'推荐失败');
+    }
+    btn.textContent=oldText; btn.disabled=false;
+    setTimeout(()=>{ status.textContent=''; }, 4000);
+  }
+  // 事件委托：路径区点击「更多资源」按钮
+  pathOut.addEventListener('click', e=>{
+    const btn=e.target.closest('.more-res-btn');
+    if(!btn) return;
+    fetchMoreResources(+btn.dataset.phaseIdx, btn);
+  });
+
+  // ===== STEP4 点击加载（带进度条） =====
+  const pathStartBtn=document.getElementById('pathStartBtn');
+  // 进度条配置：4 个阶段，模拟平滑递增
+  const PATH_STEPS=[
+    {p:18, t:'📖 读取目标岗位 JD…'},
+    {p:40, t:'🧠 提取你的工程经历关键能力…'},
+    {p:68, t:'📊 对比差距，盘点已具备 / 待补齐技能…'},
+    {p:92, t:'📚 定制三阶段学习路径（含资源链接）…'}
+  ];
+  let pathProgressTimer=null;
+  function showPathStart(){
+    // 恢复初始「开始定制」按钮（如果之前生成了又重新进入且没改 JD）
+    if(pathOut.dataset.done==='1') return;
+    pathOut.innerHTML=`<div class="path-start"><div style="font-size:15px;color:var(--sub);margin-bottom:14px">点击下方按钮让 AI 基于你的目标岗位 + 简历定制三阶段学习路径。<br>不会自动调用，避免无谓消耗。</div><button class="btn" id="pathStartBtn">🚀 开始定制学习路径</button></div>`;
+    const b=document.getElementById('pathStartBtn');
+    if(b) b.addEventListener('click', startPathWithProgress);
+  }
+  function startPathWithProgress(){
+    pathOut.innerHTML=`<div class="path-progress"><div class="pp-bar"><div class="pp-fill" id="ppFill"></div></div><div class="pp-step" id="ppStep">⏳ 准备中…</div></div>`;
+    const fill=document.getElementById('ppFill');
+    const stepEl=document.getElementById('ppStep');
+    let i=0;
+    const tick=()=>{
+      if(i>=PATH_STEPS.length) return;
+      fill.style.width=PATH_STEPS[i].p+'%';
+      stepEl.textContent=PATH_STEPS[i].t;
+      i++;
+    };
+    tick();
+    pathProgressTimer=setInterval(tick, 700);
+    const jd=(document.getElementById('jdInput').value||'').trim();
+    // 完成后无论成功失败都让进度条跑满
+    ensurePath().finally(()=>{
+      clearInterval(pathProgressTimer);
+      fill.style.width='100%';
+      stepEl.textContent='✓ 完成';
+      setTimeout(()=>{ try{ pathProgressTimer=null; }catch(_){ } }, 600);
+    });
+  }
+  if(pathStartBtn) pathStartBtn.addEventListener('click', startPathWithProgress);</script>
+</body>
+</html>

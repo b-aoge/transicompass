@@ -1,0 +1,2 @@
+# Prisma Migrate 用于校验 provider 一致性，请勿手工编辑。
+provider = "postgresql"

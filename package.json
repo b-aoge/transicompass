@@ -1,0 +1,58 @@
+{
+  "name": "transicompass",
+  "version": "1.0.0",
+  "private": true,
+  "description": "转型罗盘 TranSiCompass — 工程人转型决策工具",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "worker": "tsx src/worker/index.ts",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev",
+    "gate:p0": "node scripts/p0-scan.mjs"
+  },
+  "dependencies": {
+    "@cloudbase/node-sdk": "^2.7.0",
+    "@prisma/adapter-pg": "7.9.1",
+    "@prisma/client": "7.9.1",
+    "ioredis": "5.9.0",
+    "jose": "6.2.0",
+    "lucide-react": "1.26.0",
+    "mammoth": "1.9.1",
+    "next": "16.2.12",
+    "node-cron": "3.0.3",
+    "nodemailer": "7.0.11",
+    "openai": "5.28.4",
+    "pdfjs-dist": "5.4.394",
+    "pino": "9.13.1",
+    "playwright-core": "1.57.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "4.1.14"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.40.0",
+    "@types/node": "22.19.2",
+    "@types/nodemailer": "7.0.4",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.4",
+    "autoprefixer": "10.4.24",
+    "eslint": "9.40.0",
+    "postcss": "8.5.6",
+    "prisma": "7.9.1",
+    "tailwindcss": "3.4.19",
+    "tsx": "4.21.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.48.2",
+    "vitest": "3.2.4"
+  }
+}

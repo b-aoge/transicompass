@@ -1,0 +1,221 @@
+// 转型罗盘 TranSiCompass 数据模型
+// 唯一来源：Spec 6.1 ER 图与 6.2 表定义详解。
+//
+// 加密约定（ADR-006 / Spec 6.3）：所有 *_enc 字段存 AES-256-GCM 密文，
+// 布局 [1B keyVersion][12B IV][密文][16B AuthTag]，由应用层 src/lib/security/field-cipher.ts
+// 负责加解密，密钥永不进入数据库进程。
+//
+// 不加密的字段（created_at / expires_at / status / cta_type / model_name /
+// contact_hash / 事件名）需要参与索引与统计，且本身不构成个人信息。
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum InputType {
+  resume
+  form
+
+  @@map("input_type")
+}
+
+enum ResultStatus {
+  completed
+  degraded
+
+  @@map("result_status")
+}
+
+enum CtaType {
+  community
+  consult_1v1
+
+  @@map("cta_type")
+}
+
+enum LeadStatus {
+  new
+  contacted
+  closed
+
+  @@map("lead_status")
+}
+
+enum FallbackStatus {
+  pending
+  sent
+  failed
+
+  @@map("fallback_status")
+}
+
+model User {
+  id          String    @id @default(uuid()) @db.Uuid
+  // HMAC-SHA256(phone, PEPPER)，用于按手机号定位账号，不可逆
+  phoneHash   String    @unique @map("phone_hash")
+  phoneEnc    Bytes     @map("phone_enc")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  lastLoginAt DateTime? @map("last_login_at") @db.Timestamptz(6)
+
+  // 注册用户诊断免费额度：剩余次数与刷新锚点（每 30 天重置为 9）
+  remainingCalls Int      @default(9) @map("remaining_calls")
+  quotaResetAt   DateTime @default(now()) @map("quota_reset_at") @db.Timestamptz(6)
+
+  sessions Session[]
+  results  Result[]
+
+  @@map("users")
+}
+
+model Session {
+  id       String  @id @default(uuid()) @db.Uuid
+  userId   String? @map("user_id") @db.Uuid
+  // 匿名用户诊断免费额度（按浏览器 sid 维度，默认 3）
+  remainingCalls Int @default(3) @map("remaining_calls")
+  inputType InputType @map("input_type")
+  // 脱敏文本密文。注意：这里存的已经是客户端脱敏 + 服务端二次兜底后的文本，
+  // 原始简历字节流从不到达服务端（ADR-003）。
+  sanitizedTextEnc Bytes @map("sanitized_text_enc")
+  // 仅占位符替换计数，不含任何原文片段
+  sanitizeReport Json     @map("sanitize_report")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  expiresAt      DateTime @map("expires_at") @db.Timestamptz(6)
+
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  results      Result[]
+  leads        Lead[]
+  fallbackJobs FallbackJob[]
+
+  @@index([expiresAt], map: "idx_sessions_expires_at")
+  @@index([userId], map: "idx_sessions_user_id")
+  @@map("sessions")
+}
+
+model Result {
+  id        String  @id @default(uuid()) @db.Uuid
+  sessionId String  @map("session_id") @db.Uuid
+  userId    String? @map("user_id") @db.Uuid
+  // { "v": 1, "iv": "...", "tag": "...", "data": "<base64 ciphertext>" }
+  payloadEnc    Json         @map("payload_enc")
+  title         String?      @db.VarChar(40)
+  modelName     String       @map("model_name")
+  promptVersion String       @map("prompt_version")
+  status        ResultStatus
+  outOfScope    Boolean      @default(false) @map("out_of_scope")
+  savedAt       DateTime?    @map("saved_at") @db.Timestamptz(6)
+  createdAt     DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  expiresAt     DateTime     @map("expires_at") @db.Timestamptz(6)
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shares  Share[]
+
+  @@index([sessionId], map: "idx_results_session_id")
+  @@index([userId, createdAt(sort: Desc)], map: "idx_results_user_id_created")
+  @@index([expiresAt], map: "idx_results_expires_at")
+  @@map("results")
+}
+
+model Share {
+  id       String @id @default(uuid()) @db.Uuid
+  resultId String @map("result_id") @db.Uuid
+  // nanoid(32)，字符集 A-Za-z0-9_-，不可枚举
+  token     String    @unique(map: "idx_shares_token")
+  viewCount Int       @default(0) @map("view_count")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz(6)
+  // 用户删除数据时置为 now()，与物理删除构成双保险
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
+
+  result Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
+
+  @@index([resultId], map: "idx_shares_result_id")
+  @@index([expiresAt], map: "idx_shares_expires_at")
+  @@map("shares")
+}
+
+model Lead {
+  id        String  @id @default(uuid()) @db.Uuid
+  sessionId String? @map("session_id") @db.Uuid
+  resultId  String? @map("result_id") @db.Uuid
+  ctaType   CtaType @map("cta_type")
+  contactEnc Bytes  @map("contact_enc")
+  // HMAC-SHA256(contact, PEPPER)，用于去重与同一人多次留资识别，不可逆
+  contactHash   String     @map("contact_hash")
+  contactType   String     @map("contact_type")
+  sourceChannel String?    @map("source_channel")
+  status        LeadStatus @default(new)
+  createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // 刻意不设 expiresAt：留资是用户主动提供且有明确业务目的的信息，
+  // 保留期依隐私政策约定（12 个月）单独管理，不随会话删除而删除。
+  session Session? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  @@index([contactHash], map: "idx_leads_contact_hash")
+  @@index([createdAt(sort: Desc)], map: "idx_leads_created_at")
+  @@index([status], map: "idx_leads_status")
+  @@map("leads")
+}
+
+model Event {
+  id         BigInt   @id @default(autoincrement())
+  sessionId  String?  @map("session_id") @db.Uuid
+  name       String
+  props      Json?
+  device     String?
+  appVersion String?  @map("app_version")
+  occurredAt DateTime @map("occurred_at") @db.Timestamptz(6)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // 明确不存字段：ip、user_agent 原文、referrer 完整 URL
+  @@index([name, occurredAt(sort: Desc)], map: "idx_events_name_time")
+  @@index([sessionId], map: "idx_events_session")
+  @@map("events")
+}
+
+model FallbackJob {
+  id        String         @id @default(uuid()) @db.Uuid
+  sessionId String         @map("session_id") @db.Uuid
+  emailEnc  Bytes          @map("email_enc")
+  attempts  Int            @default(0)
+  status    FallbackStatus @default(pending)
+  lastError String?        @map("last_error")
+  createdAt DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  expiresAt DateTime       @map("expires_at") @db.Timestamptz(6)
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt], map: "idx_fallback_jobs_status")
+  @@index([expiresAt], map: "idx_fallback_jobs_expires_at")
+  @@map("fallback_jobs")
+}
+
+model AuthChallenge {
+  id          String    @id @default(uuid()) @db.Uuid
+  phoneHash   String    @unique @map("phone_hash")
+  codeHash    String    @map("code_hash")
+  attempts    Int       @default(0)
+  lockedUntil DateTime? @map("locked_until") @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  expiresAt   DateTime  @map("expires_at") @db.Timestamptz(6)
+
+  // Redis 不可用时的降级落点（ADR-007）。验证码本身只存 HMAC，不存明文。
+  @@index([expiresAt], map: "idx_auth_challenges_expires_at")
+  @@map("auth_challenges")
+}
+
+model RateCounter {
+  key       String   @id
+  count     Int      @default(0)
+  windowEnd DateTime @map("window_end") @db.Timestamptz(6)
+
+  // Redis 不可用时的限流降级表（ADR-007），生产建议建为 UNLOGGED TABLE
+  @@index([windowEnd], map: "idx_rate_counters_window_end")
+  @@map("rate_counters")
+}

@@ -1,0 +1,196 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$meta": {
+    "product": "转型罗盘 TranSiCompass",
+    "version": "1.0.0",
+    "theme": "light-only (V1 强制浅色，dark 预留 V1.1)",
+    "register": "Product（工具型，克制策略：中性色 70-90% + 单一强调色 ≤10%）",
+    "variance": { "DESIGN_VARIANCE": 4, "MOTION_INTENSITY": 3, "VISUAL_DENSITY": 6 },
+    "iconLibrary": { "name": "Lucide", "license": "ISC", "grid": 24 },
+    "note": "禁止硬编码颜色。前端一律 import 本文件或引用 tokens.css 的 CSS 变量。"
+  },
+
+  "color": {
+    "surface": {
+      "bg":            { "value": "#F6F7F9", "type": "color", "$layer": "A1-identity", "$desc": "页面底色。冷灰白，取自蓝晒图纸张，非奶油非纯白" },
+      "surface":       { "value": "#FFFFFF", "type": "color", "$layer": "A1-identity", "$desc": "卡片/容器面" },
+      "surface-sunken":{ "value": "#EDEFF3", "type": "color", "$layer": "B-slot",      "$desc": "凹陷面：原文引用、对照前项、免责声明" },
+      "surface-raised":{ "value": "#FFFFFF", "type": "color", "$layer": "B-slot",      "$desc": "浮起面：弹层、sticky 条" }
+    },
+    "foreground": {
+      "fg":       { "value": "#10151C", "type": "color", "$layer": "A1-identity", "$contrastOnBg": "17.09:1", "$desc": "主文本。近黑带蓝调，非纯黑" },
+      "fg-2":     { "value": "#333C49", "type": "color", "$layer": "B-slot",      "$contrastOnBg": "10.40:1", "$desc": "次级文本、正文长段" },
+      "muted":    { "value": "#5A6572", "type": "color", "$layer": "A1-identity", "$contrastOnBg": "5.54:1",  "$desc": "副文本、字段说明" },
+      "meta":     { "value": "#67707E", "type": "color", "$layer": "B-slot",      "$contrastOnBg": "4.67:1",  "$desc": "三级元数据、时间戳。仍达 WCAG AA" },
+      "on-accent":{ "value": "#FFFFFF", "type": "color", "$layer": "A2",          "$contrastOnAccent": "8.49:1" }
+    },
+    "border": {
+      "border":        { "value": "#DDE1E8", "type": "color", "$layer": "A1-identity", "$desc": "卡片默认边框（配合 elev-ring）" },
+      "border-soft":   { "value": "#EAEDF1", "type": "color", "$layer": "B-slot",      "$desc": "列表内行分隔（divide-y）、刻度线" },
+      "border-strong": { "value": "#C3CAD4", "type": "color", "$layer": "B-slot",      "$desc": "输入框、需明确边界的交互元素" }
+    },
+    "accent": {
+      "accent":        { "value": "#14507D", "type": "color", "$layer": "A1-identity", "$name": "Blueprint Blue", "$contrastOnBg": "7.92:1", "$desc": "品牌强调。蓝晒图深钢蓝。每屏可见使用 ≤2 处" },
+      "accent-hover":  { "value": "#10426A", "type": "color", "$layer": "A2" },
+      "accent-active": { "value": "#0C3555", "type": "color", "$layer": "A2" },
+      "accent-wash":   { "value": "#EAF0F6", "type": "color", "$layer": "C-extension", "$desc": "极淡强调底：选中态、最匹配卡、交付物卡" },
+      "accent-border": { "value": "#B9CCDD", "type": "color", "$layer": "C-extension", "$desc": "淡强调边框，用于 wash 底的容器，避免大面积饱和" },
+      "accent-ring":   { "value": "rgba(20, 80, 125, 0.28)", "type": "color", "$layer": "A2", "$desc": "focus 环" }
+    },
+    "semantic": {
+      "success":        { "value": "#0E7A54", "type": "color", "$layer": "A2", "$contrastOnBg": "4.98:1", "$desc": "工程验收绿：已达成、匹配、成功" },
+      "success-wash":   { "value": "#E7F4EE", "type": "color", "$layer": "C-extension" },
+      "success-border": { "value": "#B7DECB", "type": "color", "$layer": "C-extension" },
+      "warn":           { "value": "#9A5A0B", "type": "color", "$layer": "A2", "$contrastOnBg": "5.10:1", "$desc": "赭石琥珀：差距项、待补齐、置信度提示" },
+      "warn-wash":      { "value": "#FBF1E3", "type": "color", "$layer": "C-extension" },
+      "warn-border":    { "value": "#EBD3AE", "type": "color", "$layer": "C-extension" },
+      "danger":         { "value": "#B42318", "type": "color", "$layer": "A2", "$contrastOnBg": "6.13:1", "$desc": "错误、删除数据、校验失败" },
+      "danger-wash":    { "value": "#FDECEA", "type": "color", "$layer": "C-extension" },
+      "danger-border":  { "value": "#F3C4BF", "type": "color", "$layer": "C-extension" },
+      "danger-ring":    { "value": "rgba(180, 35, 24, 0.28)", "type": "color", "$layer": "A2" }
+    },
+    "data": {
+      "data-1":     { "value": "#14507D", "type": "color", "$layer": "C-extension", "$desc": "匹配度排名第 1（= accent 同值）" },
+      "data-2":     { "value": "#2E7DA6", "type": "color", "$layer": "C-extension", "$contrastOnSurface": "4.56:1", "$desc": "排名第 2" },
+      "data-3":     { "value": "#5F89A3", "type": "color", "$layer": "C-extension", "$contrastOnSurface": "3.75:1", "$desc": "排名第 3" },
+      "data-track": { "value": "#DDE1E8", "type": "color", "$layer": "C-extension", "$desc": "刻度条底槽" },
+      "$note": "同色系深浅递进，暗示排序。禁止彩虹色板。匹配度必须数字+条长+文字档位三重编码，绝不单靠颜色传达。"
+    }
+  },
+
+  "font": {
+    "family": {
+      "display": { "value": "\"Archivo\", \"PingFang SC\", \"HarmonyOS Sans SC\", \"Source Han Sans SC\", \"Noto Sans SC\", \"Microsoft YaHei\", system-ui, sans-serif", "type": "fontFamily", "$layer": "A1-identity", "$desc": "标题。Archivo 自托管 latin 子集 woff2（约 30KB），中文回落系统字体" },
+      "body":    { "value": "-apple-system, BlinkMacSystemFont, \"PingFang SC\", \"HarmonyOS Sans SC\", \"Source Han Sans SC\", \"Noto Sans SC\", \"Microsoft YaHei\", \"Segoe UI\", Roboto, sans-serif", "type": "fontFamily", "$layer": "A1-identity", "$desc": "正文。纯系统栈，零加载成本，中文渲染最佳" },
+      "mono":    { "value": "\"JetBrains Mono\", ui-monospace, SFMono-Regular, \"SF Mono\", Consolas, \"Liberation Mono\", monospace", "type": "fontFamily", "$layer": "A2", "$desc": "数字读数。仅子集化数字+符号（约 8KB）。匹配度/年限/时间轴必须用它，配 tabular-nums" }
+    },
+    "size": {
+      "xs":   { "value": "12px", "type": "dimension", "$layer": "A1-structure" },
+      "sm":   { "value": "14px", "type": "dimension", "$layer": "A1-structure" },
+      "base": { "value": "16px", "type": "dimension", "$layer": "A1-structure", "$desc": "正文基准，不得小于此值" },
+      "lg":   { "value": "18px", "type": "dimension", "$layer": "A1-structure" },
+      "xl":   { "value": "20px", "type": "dimension", "$layer": "A1-structure" },
+      "2xl":  { "value": "clamp(22px, 4.2vw, 24px)", "type": "dimension", "$layer": "A1-structure" },
+      "3xl":  { "value": "clamp(26px, 5.6vw, 32px)", "type": "dimension", "$layer": "A1-structure" },
+      "4xl":  { "value": "clamp(30px, 7vw, 40px)", "type": "dimension", "$layer": "A1-structure", "$desc": "clamp 下限保守，防中文长标题在 320px 屏溢出" }
+    },
+    "weight": {
+      "read":      { "value": "400", "type": "fontWeight", "$desc": "正文、描述" },
+      "emphasize": { "value": "500", "type": "fontWeight", "$desc": "小标题、标签、强调" },
+      "announce":  { "value": "600", "type": "fontWeight", "$desc": "标题、CTA、能力名" },
+      "$note": "不使用 300 及以下字重：微信安卓 X5 内核下细字重中文渲染发虚。不使用 700 以上：过重不符克制基调。"
+    },
+    "leading": {
+      "tight":   { "value": "1.25", "type": "number", "$desc": "大标题" },
+      "snug":    { "value": "1.4",  "type": "number", "$desc": "小标题、卡片标题" },
+      "body":    { "value": "1.65", "type": "number", "$desc": "中文正文，高于西文常用 1.5" },
+      "relaxed": { "value": "1.75", "type": "number", "$desc": "长文档：隐私政策、免责声明" }
+    },
+    "tracking": {
+      "display": { "value": "-0.02em", "type": "dimension", "$desc": "≥32px 标题" },
+      "heading": { "value": "-0.01em", "type": "dimension", "$desc": "20-24px 标题" },
+      "body":    { "value": "0",       "type": "dimension" },
+      "small":   { "value": "0.01em",  "type": "dimension", "$desc": "12-13px 小字" },
+      "caps":    { "value": "0.08em",  "type": "dimension", "$desc": "全大写/section 标签，强制值" },
+      "mono":    { "value": "0.01em",  "type": "dimension" }
+    }
+  },
+
+  "space": {
+    "1":  { "value": "4px",  "type": "dimension" },
+    "2":  { "value": "8px",  "type": "dimension" },
+    "3":  { "value": "12px", "type": "dimension" },
+    "4":  { "value": "16px", "type": "dimension" },
+    "5":  { "value": "20px", "type": "dimension" },
+    "6":  { "value": "24px", "type": "dimension" },
+    "8":  { "value": "32px", "type": "dimension" },
+    "10": { "value": "40px", "type": "dimension" },
+    "12": { "value": "48px", "type": "dimension" },
+    "16": { "value": "64px", "type": "dimension" },
+    "20": { "value": "80px", "type": "dimension" },
+    "$note": "4px 基准网格。仅允许以上值，禁止 5/7/13/15/22/30 等非标值。"
+  },
+
+  "radius": {
+    "xs":   { "value": "4px",    "type": "dimension", "$desc": "标签、刻度条、进度条" },
+    "sm":   { "value": "6px",    "type": "dimension", "$desc": "按钮、输入框、chip" },
+    "md":   { "value": "10px",   "type": "dimension", "$desc": "卡片" },
+    "lg":   { "value": "14px",   "type": "dimension", "$desc": "弹层、ActionSheet、大容器" },
+    "pill": { "value": "9999px", "type": "dimension", "$desc": "仅计数 chip / 状态 chip" },
+    "$note": "上限 14px。禁止 ≥24px 过度圆角（AI 过度圆滑特征）。工程语义偏方，整体取小圆角。"
+  },
+
+  "shadow": {
+    "flat":        { "value": "none", "type": "boxShadow" },
+    "ring":        { "value": "0 0 0 1px #DDE1E8", "type": "boxShadow", "$desc": "卡片默认层级：只有环，无投影" },
+    "ring-strong": { "value": "0 0 0 1px #C3CAD4", "type": "boxShadow" },
+    "ring-accent": { "value": "0 0 0 1.5px #14507D", "type": "boxShadow", "$desc": "最匹配卡、选中态" },
+    "raised":      { "value": "0 1px 2px rgba(16,21,28,0.05), 0 2px 6px rgba(16,21,28,0.06)", "type": "boxShadow", "$desc": "最大 blur 6px。用于无边框元素" },
+    "overlay":     { "value": "0 8px 24px rgba(16,21,28,0.14)", "type": "boxShadow", "$desc": "仅 Modal / ActionSheet，元素本身无边框" },
+    "sticky":      { "value": "0 -1px 0 #DDE1E8, 0 -6px 14px rgba(16,21,28,0.05)", "type": "boxShadow", "$desc": "底部 CTA 条：顶部发丝线 + 轻上浮" },
+    "$note": "禁止幽灵卡片：1px 边框与 blur ≥16px 投影不得同时出现在同一元素。ring 与 raised 二选一。"
+  },
+
+  "focus": {
+    "ring":        { "value": "0 0 0 3px rgba(20,80,125,0.28)",  "type": "boxShadow" },
+    "ring-danger": { "value": "0 0 0 3px rgba(180,35,24,0.28)", "type": "boxShadow" },
+    "offset":      { "value": "2px", "type": "dimension" },
+    "$note": ":focus-visible 必须可见。严禁 outline:none 而无替代。"
+  },
+
+  "motion": {
+    "instant": { "value": "80ms",  "type": "duration", "$desc": "按钮按下、开关" },
+    "fast":    { "value": "150ms", "type": "duration", "$desc": "hover、选中态（跨系统收敛值）" },
+    "base":    { "value": "200ms", "type": "duration", "$desc": "展开折叠、步骤打勾、sticky 显隐" },
+    "slow":    { "value": "300ms", "type": "duration", "$desc": "ActionSheet / Modal 进出" },
+    "ease-standard": { "value": "cubic-bezier(0.2, 0, 0, 1)", "type": "cubicBezier" },
+    "ease-out":      { "value": "cubic-bezier(0, 0, 0.2, 1)", "type": "cubicBezier" },
+    "ease-in-out":   { "value": "cubic-bezier(0.4, 0, 0.2, 1)", "type": "cubicBezier" },
+    "$note": "MOTION_INTENSITY=3。无装饰动画、无持续微动画、无入场位移。必须实现 prefers-reduced-motion 降级为 0ms。"
+  },
+
+  "layout": {
+    "container-reading": { "value": "720px",  "type": "dimension", "$desc": "结果页/长文档。中文每行 25-37 字最佳阅读区" },
+    "container-app":     { "value": "1120px", "type": "dimension", "$desc": "输入页桌面分屏壳" },
+    "gutter-phone":      { "value": "16px",   "type": "dimension" },
+    "gutter-tablet":     { "value": "24px",   "type": "dimension" },
+    "gutter-desktop":    { "value": "32px",   "type": "dimension" },
+    "section-y-phone":   { "value": "32px",   "type": "dimension" },
+    "section-y-tablet":  { "value": "48px",   "type": "dimension" },
+    "section-y-desktop": { "value": "80px",   "type": "dimension" },
+    "header-h":          { "value": "56px",   "type": "dimension" },
+    "cta-bar-h":         { "value": "68px",   "type": "dimension" },
+    "tap-min":           { "value": "44px",   "type": "dimension", "$desc": "WCAG 2.5.5 最小触摸目标，硬约束" }
+  },
+
+  "breakpoint": {
+    "xs": { "value": "0px",    "type": "dimension", "$desc": "320-359 必须不横向滚动" },
+    "sm": { "value": "360px",  "type": "dimension", "$desc": "主流手机。设计基准 375" },
+    "md": { "value": "768px",  "type": "dimension", "$desc": "平板" },
+    "lg": { "value": "1024px", "type": "dimension", "$desc": "笔记本，启用分屏" },
+    "xl": { "value": "1280px", "type": "dimension", "$desc": "桌面设计基准" },
+    "$note": "移动优先。主战场是微信内置浏览器，所有 media query 一律 min-width。"
+  },
+
+  "zIndex": {
+    "base":          { "value": 0,   "type": "number" },
+    "raised":        { "value": 10,  "type": "number" },
+    "sticky-header": { "value": 100, "type": "number" },
+    "sticky-cta":    { "value": 200, "type": "number" },
+    "dropdown":      { "value": 300, "type": "number" },
+    "backdrop":      { "value": 400, "type": "number" },
+    "modal":         { "value": 410, "type": "number" },
+    "toast":         { "value": 500, "type": "number" }
+  },
+
+  "icon": {
+    "library":   { "value": "lucide", "type": "string", "$license": "ISC" },
+    "size-sm":   { "value": "16px", "type": "dimension", "$desc": "行内文字旁标记、表单内联提示、标签" },
+    "size-md":   { "value": "20px", "type": "dimension", "$desc": "按钮内图标、列表项、导航项（默认档）" },
+    "size-lg":   { "value": "24px", "type": "dimension", "$desc": "卡片/区块标题、空状态、赛道卡" },
+    "stroke-sm": { "value": "2",    "type": "number", "$desc": "配 16px。渲染线宽 2×(16/24)=1.33px" },
+    "stroke-md": { "value": "1.75", "type": "number", "$desc": "配 20px。渲染线宽 1.75×(20/24)=1.46px" },
+    "stroke-lg": { "value": "1.5",  "type": "number", "$desc": "配 24px。渲染线宽 1.50px。三档实渲染近似恒定" },
+    "$note": "颜色一律 currentColor。严禁 emoji 充当功能图标。全项目只用 Lucide 一套，不混用。"
+  }
+}

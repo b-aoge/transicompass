@@ -1,0 +1,6 @@
+{
+  "envId": "transicompass-demo-d4ca9690074db",
+  "cloudrun": {
+    "name": "transicompass-backend"
+  }
+}

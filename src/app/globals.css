@@ -1,0 +1,243 @@
+/* ==========================================================================
+   转型罗盘 · 全局样式入口
+
+   加载顺序说明（这段顺序是刻意的，改动前先读完）：
+   1. @import 令牌  —— CSS 规范要求 @import 必须在文件最前，故它落在 preflight 之前
+   2. @tailwind base —— Tailwind preflight 在此注入，会把 tokens.css 里 body / h1-h4
+      的元素级基线覆盖掉（preflight 有 `body{line-height:inherit}`、
+      `h1..h6{font-size:inherit;font-weight:inherit}`）
+   3. @layer base   —— 因此在 preflight 之后把这几条基线重新声明一遍。
+      自定义属性（:root 变量）不受 preflight 影响，无需重复。
+
+   禁用清单（ADR-002 / ADR-011，兼容下限 Chrome 88）：
+   动态取色、:has 选择器、容器查询、oklch 色彩、裸写 100dvh —— 本文件零使用。
+   满屏高度一律用 tokens.css 提供的 .h-screen-safe / .h-screen-fixed。
+   ========================================================================== */
+@import '../styles/tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%; /* 微信内置浏览器字号漂移 */
+    text-size-adjust: 100%;
+    overflow-x: hidden; /* 320px 下任何一处溢出都不得产生横向滚动 */
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-body);
+    -webkit-font-smoothing: antialiased;
+    overflow-wrap: anywhere; /* 中文长词 + 窄网格防溢出 */
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: var(--weight-announce);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-heading);
+    margin: 0;
+  }
+  h1 {
+    font-size: var(--text-3xl);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-display);
+  }
+  h2 {
+    font-size: var(--text-2xl);
+  }
+  h3 {
+    font-size: var(--text-xl);
+  }
+  h4 {
+    font-size: var(--text-lg);
+  }
+
+  /* 焦点可见性全局兜底。任何组件不得写裸 outline:none 而不给替代。 */
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--radius-sm);
+  }
+
+  /* 触摸目标兜底（WCAG 2.5.5）。需要更小视觉尺寸的元素，
+     用「视觉盒子 + 44px 热区包裹」的写法，而不是把这条调小。 */
+  button,
+  a[role='button'],
+  input[type='checkbox'],
+  input[type='radio'] {
+    min-height: var(--tap-min);
+    min-width: var(--tap-min);
+  }
+
+  /* 表单元素默认继承字体，避免 iOS Safari 用 -apple-system-body */
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+  }
+
+  /* iOS 聚焦自动放大的根因是字号 < 16px；正文基准即 16px，此处兜底 textarea */
+  textarea {
+    font-size: var(--text-base);
+  }
+
+  ::placeholder {
+    color: var(--meta);
+    opacity: 1; /* Firefox 默认降透明度，会跌破对比度 */
+  }
+
+  /* 打印：PDF 版式与分享截图都走这里 */
+  @media print {
+    body {
+      background: #fff;
+    }
+    .print-hidden {
+      display: none !important;
+    }
+  }
+}
+
+@layer components {
+  /* ------------------------------------------------------------------
+     页面壳：移动 100% + gutter，桌面切阅读容器 / 应用容器
+     ------------------------------------------------------------------ */
+  .container-reading {
+    width: 100%;
+    max-width: calc(var(--container-reading) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .container-app {
+    width: 100%;
+    max-width: calc(var(--container-app) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* 底部安全区：吸底 CTA、ActionSheet 用 */
+  .pb-safe {
+    padding-bottom: var(--safe-b);
+  }
+  .mb-safe {
+    margin-bottom: var(--safe-b);
+  }
+
+  /* 44px 热区包裹一个更小的视觉盒子（chip / checkbox / 图标按钮） */
+  .tap-target {
+    position: relative;
+  }
+  .tap-target::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    min-width: var(--tap-min);
+    min-height: var(--tap-min);
+    transform: translate(-50%, -50%);
+  }
+
+  /* 发丝线分隔（divide-y 的语义版，避免到处写 border-b） */
+  .hairline-y > * + * {
+    border-top: 1px solid var(--border-soft);
+  }
+}
+
+@layer utilities {
+  /* 动效全部 ≤300ms，且只动 transform / opacity。
+     prefers-reduced-motion 降级由 tokens.css 全局 !important 接管。 */
+  .animate-fade-in {
+    animation: tsc-fade-in var(--motion-base) var(--ease-out) both;
+  }
+  .animate-rise-in {
+    animation: tsc-rise-in var(--motion-slow) var(--ease-out) both;
+  }
+  .animate-shake {
+    animation: tsc-shake 320ms var(--ease-in-out) 1;
+  }
+  .animate-highlight {
+    animation: tsc-highlight 1500ms var(--ease-standard) 1;
+  }
+
+  /* 骨架屏呼吸。用 opacity 而非 background-position，老内核更省电 */
+  .animate-pulse-soft {
+    animation: tsc-pulse 1400ms var(--ease-in-out) infinite;
+  }
+
+  /* 文本截断到 N 行（-webkit-line-clamp 在 Chrome 88 已可用） */
+  .clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+@keyframes tsc-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes tsc-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tsc-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes tsc-highlight {
+  0%,
+  70% {
+    background-color: var(--accent-wash);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes tsc-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
